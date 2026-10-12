@@ -34,10 +34,10 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=5" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=5">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=5">
-<link rel="manifest" href="site.webmanifest?v=5">
+<link rel="icon" href="favicon.ico?v=6" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=6">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=6">
+<link rel="manifest" href="site.webmanifest?v=6">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -55,7 +55,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=5">
+<link rel="stylesheet" href="assets/css/styles.css?v=6">
 </head>
 <body>
 
@@ -140,12 +140,12 @@
     <div class="hero__stage">
     <video
       class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=5"
+      poster="images/header_poster.webp?v=6"
       width="672" height="448"
       autoplay muted loop playsinline preload="none"
       aria-label="$3210 — the phone that never dies. A blue Nokia-style phone on a glowing blue stage, its screen cycling through Snake and $3210, beside BUY $3210. GET $NOKc., on Base."
-      data-src="images/header.mp4?v=5"
-      data-src-webm="images/header.webm?v=5"></video>
+      data-src="images/header.mp4?v=6"
+      data-src-webm="images/header.webm?v=6"></video>
 
     <script>
       (function () {
@@ -428,8 +428,8 @@
 <!-- ?v= is the cache buster: run `node scripts/stamp.mjs` on every deploy,
      which moves every ?v= here and `version` in config.js together. Skip it
      and a CDN keeps serving the previous config.js and app.js. -->
-<script src="config.js?v=5"></script>
-<script src="assets/js/app.js?v=5"></script>
-<script type="module" src="assets/js/snake/phone.js?v=5"></script>
+<script src="config.js?v=6"></script>
+<script src="assets/js/app.js?v=6"></script>
+<script type="module" src="assets/js/snake/phone.js?v=6"></script>
 </body>
 </html>
