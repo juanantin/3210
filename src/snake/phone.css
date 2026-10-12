@@ -1,0 +1,102 @@
+.nk-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px 16px;
+}
+
+.nk-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  margin-right: -0.4em;
+  opacity: 0.55;
+}
+
+/* The phone photo, sized to fit the viewport height as well as its width. */
+.nk-phone {
+  position: relative;
+  width: min(340px, 100%, calc((100vh - 170px) * 480 / 1168));
+  min-width: 220px;
+  aspect-ratio: 480 / 1168;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 28px 40px rgba(0, 0, 0, 0.55));
+}
+
+.nk-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Game pixels drawn over the photo's own LCD glass. */
+.nk-lcd {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.nk-lcd canvas {
+  width: 92%;
+  aspect-ratio: 84 / 48;
+}
+
+.nk-key {
+  position: absolute;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  touch-action: manipulation;
+  transition: background 0.05s ease;
+}
+
+.nk-key:hover {
+  transform: none;
+}
+
+.nk-key.is-held,
+.nk-key:active {
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.12) 70%, transparent);
+}
+
+.nk-key:focus-visible {
+  outline: 2px solid rgba(140, 190, 255, 0.8);
+  outline-offset: -2px;
+}
+
+.nk-help {
+  max-width: 360px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.nk-help kbd {
+  display: inline-block;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.nk-sound {
+  margin-top: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  font-size: 13px;
+}
