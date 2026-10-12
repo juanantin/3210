@@ -1,7 +1,8 @@
-# $3210 — Snake, on Base
+# $3210 — the phone that never dies
 
-The site for the $3210 token: the coin and its ticker, a live dashboard, and
-classic Snake playable on a Nokia-style phone right on the page. Static
+The site for the $3210 token on Base — *buy $3210, get $NOKc*: the banner, a
+live dashboard, and classic Snake playable on a Nokia-style phone right on
+the page. Static
 HTML/CSS/JS — no dependencies, no framework, and no build beyond copying
 the served files into `dist/`.
 
@@ -11,8 +12,9 @@ sources, the indexer and the deploy setup are that site's, re-pointed. Where a
 lesson below quotes another token's numbers, those numbers are the evidence —
 the behaviour they describe is the platform's.
 
-**Status: pre-launch.** The X link is set; the contract address, the rewards
-index and everything derived from them are not, so every dashboard card shows
+**Status: pre-launch.** The X link and the reward ticker ($NOKc) are set;
+the contract address, the rewards index and everything derived from them are
+not, so every dashboard card shows
 `—` and the indexer refuses to run. [`SETUP.md`](SETUP.md) is the checklist
 for filling them in.
 
@@ -23,7 +25,7 @@ assets/css/styles.css
 assets/js/app.js      the dashboard
 assets/js/snake/      the game: engine, LCD framebuffer, bitmap font, beeps,
                       and phone.js, which mounts it over images/phone.webp
-images/               the coin, the phone, icons, the social card
+images/               the banner, the phone, icons, partner marks, the social card
 images/src/           the originals everything above is derived from
 data/rewards.json     protocol figures the dashboard reads
 scripts/              GitHub Actions indexer, discovery and probes
@@ -32,12 +34,16 @@ worker/               the same indexer as a Cloudflare Worker (optional)
 
 ## What's on the page
 
-- **Hero** — the $3210 coin, the ticker as the page's `<h1>`, and one line.
+- **Hero** — the banner (`images/banner.webp`, 1500×500, with a 1000px
+  `srcset` variant): the wordmark, "The phone that never dies.", "Buy $3210.
+  Get $NOKc." and the Base / Stonks.Exchange / Stockify marks. The `<h1>`
+  behind it is screen-reader only. Its edges are feathered into the page on
+  desktop; on a phone it runs edge to edge but is never overscanned, because
+  the banner has marks in its corners.
 - **Actions** — three buttons: X, the chart, and a button that copies the CA
   and flashes a confirmation. Before launch the chart and copy buttons say so
   instead of opening an empty page.
-- **Dashboard** — six live cards: total rewards distributed (in the reward
-  token, USD beneath), total fees collected, holders, market cap, liquidity
+- **Dashboard** — six live cards: total $NOKc distributed (USD beneath), total fees collected, holders, market cap, liquidity
   and 24h volume. The reward ticker and the "% to holder rewards" note come
   from `config.js` (`rewardTokenSymbol`, `holderShare`) and stay blank until
   set. A `—` means no source produced a number — never a guess.
@@ -56,12 +62,18 @@ worker/               the same indexer as a Cloudflare Worker (optional)
 
 ## Design
 
-The template's design, recoloured. One face — **Inter** — across four
-weights; square corners everywhere, and cards lifted by a stepped block
-shadow rather than a blur, which is pixel art and suits a token whose idea is
-an LCD. The accent is the coin's own blue (`--accent` #0b3fb3, `--accent-deep`
-#002d82), the second colour its screen's green (`--lcd` #7bab70), and the
-cubes drifting behind the page come in both. Light theme only.
+The banner's world, on the template's bones. A near-black navy page
+(`--page` #000e27, the banner's own edge colour, so the hero has no seam) lit
+by a blue glow from the top; cards a shade lighter, square-cornered and lifted
+by a stepped block shadow; one bright blue (`--accent` #2a9bfc, sampled from
+"BUY $3210. GET $NOKc."), a lighter tint for text (`--accent-deep` #7cc2ff),
+and the LCD's green (`--lcd`) on the game card. Cubes drift in the gutters in
+both colours.
+
+Two faces from Google Fonts: **Silkscreen**, a pixel face in the banner's
+spirit, for headings, labels, figures and keys; **Inter** for anything read as
+a sentence. Silkscreen draws lowercase as small capitals, so "$NOKc" keeps its
+case (`.ticker`) but its "c" reads as a small C. Dark theme only.
 
 ## Data sources
 
@@ -297,13 +309,17 @@ cd worker && npm test
 ## Notes
 
 - Every icon (`favicon.ico` at the root, `images/favicon.png`, the two
-  manifest icons and `images/apple-touch-icon.png`) and `images/token.webp`
-  are generated from `images/src/token_master.webp`, trimmed to the coin and
-  left transparent — except the Apple one, flattened onto white because iOS
-  renders a transparent home-screen icon as black. Bump the `?v=` with
+  manifest icons and `images/apple-touch-icon.png`) is generated from
+  `images/src/token_master.webp`, trimmed to the coin and left transparent —
+  except the Apple one, flattened onto the page navy because iOS renders a
+  transparent home-screen icon as black. Bump the `?v=` with
   `node scripts/stamp.mjs` when the mark changes.
-- `images/social.jpg` is the 1200×630 share card: the coin and the wordmark
-  set in Inter. Once the site has its final domain, make the `og:image`,
+- `images/social.jpg` is the 1200×630 share card: the banner whole, its top
+  and bottom rows extended and faded into the ground — a 3:1 banner cropped to
+  a card's 2:1 would lose its corner marks.
+- `images/stonkex_button.png` and `images/stockify_logo.png` are the partner
+  lockups with their dark wordmarks turned white for the dark page (the icons
+  are untouched), matching how the banner shows them. Once the site has its final domain, make the `og:image`,
   `twitter:image` and an `og:url` in `index.html` absolute — some scrapers do
   not resolve a relative path.
 - `images/phone.webp` is the phone, cut out of its studio background. The

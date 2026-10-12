@@ -72,22 +72,24 @@ setting on the platform's panel, and artwork.
 
 Done. For the record of how each file is made:
 
-- `images/src/token_master.webp` is the coin as supplied; `images/token.webp`,
-  `images/favicon.png`, the two `icon-*.png`, `images/apple-touch-icon.png`
-  and `/favicon.ico` are all derived from it (trimmed, left transparent, the
-  Apple one flattened onto white because iOS shows a transparent home-screen
-  icon as black). After changing any of them run `node scripts/stamp.mjs`,
-  which moves every `?v=` so browsers drop the cached mark.
-- `images/social.jpg` — the 1200×630 share card. When the site has its final
-  domain, make `og:image`, `twitter:image` and an `og:url` absolute in
-  `index.html`.
+- `images/src/banner_master.jpg` is the banner as supplied (1500×500); the
+  hero's `images/banner.webp` and `banner-1000.webp`, and the share card
+  `images/social.jpg`, come from it. When the site has its final domain, make
+  `og:image`, `twitter:image` and an `og:url` absolute in `index.html`.
+- `images/src/token_master.webp` is the coin; every icon is derived from it
+  (trimmed, transparent, the Apple one flattened onto the page navy). After
+  changing any of them run `node scripts/stamp.mjs`, which moves every `?v=`
+  so browsers drop the cached files.
 - `images/phone.webp` — the phone the game is drawn on. Its LCD and key hit
   areas are measured in `assets/js/snake/phone.js`.
 - Supply in `<section class="facts">` reads **TBA** — set the real figure at
   launch.
-- The two ecosystem lockups at the bottom of `index.html` assume The Stonks
-  Exchange and Stockify, like the template. If $3210 launches somewhere else,
-  swap them or delete `<section class="eco">`.
+- The two ecosystem lockups at the bottom of `index.html` are Stonks.Exchange
+  and Stockify, as on the banner; their hrefs come from `config.js`
+  `links.launchedIn` / `links.rewardsBy` once the token's own pages exist.
+- The reward ticker is `$NOKc` (`rewardTokenSymbol` in `config.js`, and the
+  first card's label in `index.html`). Confirm it against the reward token's
+  `symbol()` when discovery runs.
 
 ## 3. Live figures
 

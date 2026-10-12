@@ -1,29 +1,33 @@
 /* ==========================================================================
    $3210 — styles
 
-   Built on the $BLUE site's template: square corners, cards lifted by a
-   stepped block shadow, and floating cubes in the gutters — pixel art, which
-   suits a token whose whole idea is an 84×48 LCD. The accent is the token's
-   own Nokia blue, sampled from the coin (#002d82 deep, #0b3fb3 bright), and
-   the second colour is its LCD green (#7bab70).
+   The banner's world: a near-black navy lit by a blue glow from above, white
+   pixel type, and one bright blue (#2a9bfc, sampled from "BUY $3210. GET
+   $NOKc."). Built on the $BLUE template's bones — square corners, cards
+   lifted by a stepped block shadow, cubes drifting in the gutters — which is
+   already pixel art, and only had to be turned dark.
+
+   Two faces: Silkscreen, the pixel face, for the ticker's voice — headings,
+   labels, figures, keys; Inter for anything you read as a sentence.
    ========================================================================== */
 
 :root {
-  /* Surfaces & ink — a near-white with a breath of the coin's blue in it */
-  --page:        #f6f8fd;
-  --surface:     #ffffff;
-  --ink:         #0d1220;
-  --ink-2:       #3b4557;
-  --muted:       #78839a;
-  --line:        #e3e8f2;
-  --line-strong: #ccd6e6;
+  /* Surfaces & ink — --page is the banner's own ground (#000e25 at its
+     edges), so the hero sits on the page with no seam */
+  --page:        #000e27;
+  --surface:     #071a43;
+  --ink:         #ffffff;
+  --ink-2:       #b9c8e8;
+  --muted:       #7d92bf;
+  --line:        #143068;
+  --line-strong: #1d3f84;
 
-  /* The coin's blue, and the phone screen's green */
-  --accent:      #0b3fb3;
-  --accent-deep: #002d82;
-  --accent-soft: #e2e9f8;
-  --lcd:         #7bab70;
-  --lcd-soft:    #dfeed8;
+  /* The banner's blue, its lighter tint for text on dark, and the LCD's green */
+  --accent:      #2a9bfc;
+  --accent-deep: #7cc2ff;
+  --accent-soft: rgba(42, 155, 252, .14);
+  --lcd:         #8bd06b;
+  --lcd-soft:    rgba(139, 208, 107, .16);
 
   --base-blue:   #0052ff;
 
@@ -38,26 +42,26 @@
      Depth instead comes from --stack, a shadow drawn as two offset blocks
      with no blur — a pixel staircase — over
      one soft shadow that does the actual lifting. */
-  --face:        linear-gradient(176deg, #ffffff 0%, #fdfeff 46%, #f4f8ff 100%);
-  /* The page is a near-white, so a card cannot separate itself by being
-     lighter — there is nowhere lighter to go. It separates by EDGE
+  --face:        linear-gradient(176deg, #0c2457 0%, #091d4a 50%, #06163b 100%);
+  /* On the dark page a card separates by being a shade lighter, but mostly — there is nowhere lighter to go. It separates by EDGE
      and by DEPTH instead: a definite 2px outline, then two solid blocks
      stepping away from it. Both are pitched to stay quiet on white; a darker
      stack turns the dashboard into a comic panel. */
-  --face-edge:   #ccdaf1;
-  --stack:       4px 4px 0 #dfe8fa, 8px 8px 0 #edf2fd, 0 16px 26px rgba(13, 18, 32, .08);
-  --stack-lift:  5px 5px 0 #c9d6f3, 10px 10px 0 #e2e9f8, 0 22px 36px rgba(0, 45, 130, .18);
+  --face-edge:   #1b3f88;
+  --stack:       4px 4px 0 #0b2459, 8px 8px 0 #061840, 0 16px 30px rgba(0, 0, 0, .45);
+  --stack-lift:  5px 5px 0 #12367e, 10px 10px 0 #0b2459, 0 22px 40px rgba(42, 155, 252, .28);
 
   --r-btn:       0px;
   --r-card:      0px;
 
-  --shadow-card: 0 1px 2px rgba(20,17,15,.03), 0 6px 18px rgba(30,60,120,.06);
+  --shadow-card: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.35);
 
   --wrap:        1000px;
 
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  --pixel: "Silkscreen", "Courier New", ui-monospace, monospace;
 
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -75,10 +79,12 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 
-  /* The faint isometric cubes behind everything. Drawn rather than shipped as
-     an image so it stays crisp at any zoom and costs no request. */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%230b3fb3' stroke-opacity='.06' stroke-width='1'%3E%3Cpath d='M30 0 60 17v34L30 68 0 51V17Z'/%3E%3Cpath d='M0 17l30 17 30-17M30 34v34'/%3E%3Cpath d='M90 52l30 17v34l-30 17-30-17V69Z'/%3E%3Cpath d='M60 69l30 17 30-17M90 86v34'/%3E%3C/g%3E%3C/svg%3E");
-  background-position: center top;
+  /* The banner's glow from above, then the faint isometric cubes behind
+     everything — drawn rather than shipped, so crisp at any zoom and free. */
+  background-image: radial-gradient(70% 520px at 50% 0, rgba(36, 89, 159, .55), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%232a9bfc' stroke-opacity='.07' stroke-width='1'%3E%3Cpath d='M30 0 60 17v34L30 68 0 51V17Z'/%3E%3Cpath d='M0 17l30 17 30-17M30 34v34'/%3E%3Cpath d='M90 52l30 17v34l-30 17-30-17V69Z'/%3E%3Cpath d='M60 69l30 17 30-17M90 86v34'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat, repeat;
+  background-position: center top, center top;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -197,44 +203,29 @@ a { color: inherit; text-decoration: none; }
 
 .hero {
   padding: 8px 20px 0;
-  overflow: hidden;   /* contains the mobile overscan below */
+  overflow: hidden;
 }
 
+/* The banner IS the hero, as the clip was on $BLUE: it carries the wordmark,
+   the line and both partner marks, so the page's <h1> is screen-reader only.
+   Its ground is the page's, and the edges are feathered so it has no frame. */
 .hero__inner {
-  max-width: var(--wrap);
+  max-width: 1240px;
   margin: 0 auto;
 }
 
-/* The coin, the ticker and one line. Centred, because the actions under it
-   are centred, and the coin carries the colour so the type can stay ink. */
-.hero__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-top: 28px;
-}
-
-.hero__token {
-  width: clamp(180px, 34vw, 280px);
+.hero__media {
+  display: block;
+  width: 100%;
   height: auto;
-  filter: drop-shadow(0 18px 30px rgba(0, 45, 130, .22));
-}
-
-.hero__title {
-  margin: 14px 0 0;
-  font-size: clamp(54px, 11vw, 96px);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -.035em;
-  color: var(--accent-deep);
-}
-
-.hero__tag {
-  margin: 10px 0 0;
-  font-size: clamp(17px, 2.4vw, 21px);
-  font-weight: 600;
-  color: var(--ink-2);
+  aspect-ratio: 3 / 1;    /* 1500×500 — the banner's own ratio */
+  object-fit: cover;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent),
+                      linear-gradient(180deg, #000 88%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent),
+              linear-gradient(180deg, #000 88%, transparent);
+  mask-composite: intersect;
 }
 
 /* ==========================================================================
@@ -271,7 +262,7 @@ a { color: inherit; text-decoration: none; }
   padding: 0;
   border: 2px solid var(--face-edge);
   background: var(--face);
-  box-shadow: 4px 4px 0 #e9effc, 0 8px 14px rgba(13, 18, 32, .07);
+  box-shadow: 4px 4px 0 #0b2459, 0 8px 14px rgba(0, 0, 0, .35);
   font: inherit;
   font-size: 15.5px;
   font-weight: 500;
@@ -287,15 +278,15 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   inset: 0 0 auto;
   height: 2px;
-  background: #fff;
+  background: rgba(124, 194, 255, .22);
 }
 
 .btn > * { position: relative; z-index: 1; }
 
 .btn:hover {
   transform: translate(-2px, -2px);
-  border-color: #c2d5f6;
-  box-shadow: 6px 6px 0 var(--accent-soft), 0 14px 20px rgba(11, 83, 232, .18);
+  border-color: var(--accent);
+  box-shadow: 6px 6px 0 #0f2e6c, 0 14px 24px rgba(42, 155, 252, .3);
 }
 .btn:hover .btn__icon { color: var(--accent-deep); }
 
@@ -304,7 +295,7 @@ a { color: inherit; text-decoration: none; }
    as a rectangle changing colour. */
 .btn:active {
   transform: translate(4px, 4px);
-  box-shadow: 0 0 0 #e9effc, 0 2px 4px rgba(13, 18, 32, .12);
+  box-shadow: 0 0 0 #0b2459, 0 2px 4px rgba(0, 0, 0, .4);
 }
 
 .btn__icon { width: 19px; height: 19px; flex: none; color: var(--ink); }
@@ -329,11 +320,12 @@ a { color: inherit; text-decoration: none; }
   gap: 8px;
   padding: 9px 16px;
   border-radius: var(--r-btn);
-  background: var(--ink);
-  color: #fff;
+  background: #eaf3ff;
+  color: var(--page);
+  font-family: var(--pixel);
   font-size: 13.5px;
   white-space: nowrap;
-  box-shadow: 0 8px 22px rgba(13,18,32,.24);
+  box-shadow: 0 8px 22px rgba(0,0,0,.5);
   opacity: 0;
   transform: translate(-50%, -6px) scale(.96);
   pointer-events: none;
@@ -343,8 +335,8 @@ a { color: inherit; text-decoration: none; }
 
 .toast.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); }
 
-.toast__check { width: 15px; height: 15px; color: #7ddb6a; flex: none; }
-.toast.is-error .toast__check { color: #ff8a7a; }
+.toast__check { width: 15px; height: 15px; color: #2f9e44; flex: none; }
+.toast.is-error .toast__check { color: #d6453a; }
 
 /* ==========================================================================
    Dashboard cards
@@ -380,25 +372,29 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   inset: 0 0 auto;
   height: 2px;
-  background: #fff;
+  background: rgba(124, 194, 255, .22);
 }
 
 .stat:hover {
   transform: translate(-2px, -3px);
-  border-color: #c2d5f6;
+  border-color: var(--accent);
   box-shadow: var(--stack-lift);
 }
 
 .stat__body { min-width: 0; }
 
+/* A ticker keeps its own case — "$NOKc", not "$NOKC" — inside an uppercased label. */
+.ticker { text-transform: none; }
+
 .stat__label {
   margin: 0 0 8px;
-  font-size: 12.5px;
-  font-weight: 500;
+  font-family: var(--pixel);
+  font-size: 13px;
+  font-weight: 400;
   line-height: 1.25;
-  letter-spacing: .08em;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--accent);
 }
 
 .stat__value {
@@ -407,9 +403,10 @@ a { color: inherit; text-decoration: none; }
   flex-wrap: wrap;
   gap: 8px;
   margin: 0;
-  font-size: clamp(25px, 3.2vw, 32px);
+  font-family: var(--pixel);
+  font-size: clamp(23px, 2.9vw, 30px);
   font-weight: 700;
-  letter-spacing: -.02em;
+  letter-spacing: 0;
   line-height: 1.15;
   color: var(--ink);
   word-break: break-word;
@@ -420,7 +417,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .stat__unit {
-  font-size: .62em;
+  font-size: .56em;
   font-weight: 500;
   letter-spacing: 0;
   color: var(--ink-2);
@@ -475,13 +472,13 @@ a { color: inherit; text-decoration: none; }
   place-items: center;
   width: 52px;
   height: 52px;
-  background: linear-gradient(174deg, #4f88ff 0%, var(--accent) 52%, #0a45c8 100%);
+  background: linear-gradient(174deg, #5cb6ff 0%, var(--accent) 52%, #1468d6 100%);
   /* A voxel, read straight off the artwork: lit top face, shadowed bottom,
      and a hard block of its own colour underneath so it stands off the card
      rather than lying on it. */
   box-shadow: inset 0 2px 0 rgba(255, 255, 255, .5),
               inset 0 -2px 0 rgba(6, 34, 96, .38),
-              3px 3px 0 #dbe6fb;
+              3px 3px 0 #061840;
 }
 
 .stat__icon svg,
@@ -498,8 +495,8 @@ a { color: inherit; text-decoration: none; }
 /* Base keeps its own blue, being a network mark rather than one of the set —
    so its block stays pale and its stroke stays blue. */
 .fact__icon--base {
-  background: linear-gradient(174deg, #ffffff 0%, var(--accent-soft) 100%);
-  box-shadow: inset 0 0 0 2px #cfe0ff;
+  background: rgba(255, 255, 255, .06);
+  box-shadow: inset 0 0 0 2px var(--face-edge);
 }
 .fact__icon--base svg { stroke: var(--base-blue); }
 
@@ -598,9 +595,10 @@ a { color: inherit; text-decoration: none; }
 
 .game__title {
   margin: 0;
+  font-family: var(--pixel);
   font-size: 30px;
   font-weight: 700;
-  letter-spacing: -.02em;
+  letter-spacing: 0;
   color: var(--ink);
 }
 
@@ -627,7 +625,7 @@ a { color: inherit; text-decoration: none; }
 .game__keys kbd {
   min-width: 26px;
   padding: 3px 7px;
-  font: 600 12px/1.2 var(--font);
+  font: 400 12px/1.2 var(--pixel);
   text-align: center;
   color: var(--accent-deep);
   background: var(--accent-soft);
@@ -638,7 +636,7 @@ a { color: inherit; text-decoration: none; }
   margin-top: 22px;
   min-height: 40px;
   padding: 0 16px;
-  font: 600 13px var(--font);
+  font: 400 13px var(--pixel);
   color: var(--accent-deep);
   background: var(--surface);
   border: 2px solid var(--face-edge);
@@ -732,7 +730,7 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   inset: 0 0 auto;
   height: 2px;
-  background: #fff;
+  background: rgba(124, 194, 255, .22);
 }
 
 .fact {
@@ -750,19 +748,21 @@ a { color: inherit; text-decoration: none; }
 
 .fact__label {
   margin: 0 0 5px;
-  font-size: 11.5px;
-  font-weight: 500;
+  font-family: var(--pixel);
+  font-size: 12px;
+  font-weight: 400;
   line-height: 1.2;
-  letter-spacing: .09em;
+  letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--accent);
 }
 
 .fact__value {
   margin: 0;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -.01em;
+  font-family: var(--pixel);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0;
   line-height: 1.25;
   color: var(--ink);
 }
@@ -807,7 +807,9 @@ a { color: inherit; text-decoration: none; }
 .eco__half:hover { transform: translateY(-2px); }
 
 .eco__kicker {
-  font-size: 13.5px;
+  font-family: var(--pixel);
+  font-size: 13px;
+  letter-spacing: .03em;
   color: var(--ink-2);
   line-height: 1.3;
 }
@@ -854,7 +856,14 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 620px) {
-  .hero__inner { padding-top: 18px; }
+  /* Edge to edge on a phone, but never overscanned: the banner keeps marks
+     in all four corners (BASE, Stonks.Exchange, Stockify), so the whole
+     width stays on screen and only the bottom edge is feathered. */
+  .hero { padding: 4px 0 0; }
+  .hero__media {
+    -webkit-mask-image: linear-gradient(180deg, #000 90%, transparent);
+    mask-image: linear-gradient(180deg, #000 90%, transparent);
+  }
 
   .actions { padding: 4px 14px 22px; gap: 10px; }
   .actions__inner { gap: 10px; }

@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '1',
+  version: '2',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -26,9 +26,10 @@ window.SITE_CONFIG = {
   // the discover workflow's output rather than assuming it.
   rewardTokenAddress: null,
 
-  // TODO: matched as a substring of the reward token's own symbol(), and
-  // shown after the reward amounts on the dashboard. Read it on chain.
-  rewardTokenSymbol: null,
+  // The reward token, as the banner names it: "BUY $3210. GET $NOKc."
+  // Matched as a substring of the reward token's own symbol() and shown after
+  // the reward amounts. Confirm it against symbol() once the address is known.
+  rewardTokenSymbol: 'NOKc',
 
   // Free, keyless, CORS-enabled. The last price source, because it covers
   // tokens DexScreener has no pair for.
@@ -70,8 +71,8 @@ window.SITE_CONFIG = {
     // Leave null to auto-build a DexScreener link from the contract address.
     chart: null,
 
-    // TODO: the two lockups in the footer panel — the token's own page on the
-    // launch platform and its rewards index. Until set they point at the
+    // TODO: the two lockups in the footer panel — the token's own page on
+    // Stonks.Exchange and its Stockify index. Until set they point at the
     // platforms' home pages.
     launchedIn: null,
     rewardsBy: null,

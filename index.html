@@ -3,27 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>$3210 — Snake, on Base</title>
-<meta name="description" content="$3210 on Base: the token with a phone in it. Live dashboard, and classic Snake playable right on the page.">
+<title>$3210 — The phone that never dies</title>
+<meta name="description" content="$3210 on Base — the phone that never dies. Buy $3210, get $NOKc. Live dashboard, and classic Snake playable right on the page.">
 
 <!-- The social card. A scraper fetches these from its own servers; images/
-     social.jpg is 1200×630, the size every platform documents and none of
-     them crops. Once the site has its final domain, make og:url and both
+     social.jpg is the banner, whole, on 1200×630 — a 3:1 image loses its
+     edges to a card's 2:1 crop, so its top and bottom are extended into the
+     ground instead. Once the site has its final domain, make og:url and both
      image URLs ABSOLUTE — some scrapers will not resolve a relative path. -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="$3210">
-<meta property="og:title" content="$3210 — Snake, on Base">
-<meta property="og:description" content="The token with a phone in it. Live dashboard, and Snake playable on the page.">
+<meta property="og:title" content="$3210 — The phone that never dies">
+<meta property="og:description" content="Buy $3210. Get $NOKc. On Base.">
 <meta property="og:image" content="images/social.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="The $3210 token: a blue Nokia-style phone showing $3210 on its screen, beside the $3210 wordmark.">
+<meta property="og:image:alt" content="$3210 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3210. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@3210token">
 <meta name="twitter:image" content="images/social.jpg">
-<meta name="twitter:image:alt" content="The $3210 token: a blue Nokia-style phone showing $3210 on its screen, beside the $3210 wordmark.">
-<meta name="theme-color" content="#f6f8fd">
+<meta name="twitter:image:alt" content="$3210 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3210. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify.">
+<meta name="theme-color" content="#000e27">
 
 <!-- favicon.ico sits at the root because browsers request /favicon.ico on
      their own, regardless of these tags. Every icon is generated from
@@ -33,13 +34,13 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=1" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=1">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=1">
-<link rel="manifest" href="site.webmanifest?v=1">
+<link rel="icon" href="favicon.ico?v=2" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=2">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=2">
+<link rel="manifest" href="site.webmanifest?v=2">
 
-<!-- One face, four weights: the design separates label from figure by weight
-     and colour, so the family has to carry 400 through 700.
+<!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
+     figures; Inter, in four weights, for anything read as a sentence.
 
      Loaded WITHOUT blocking: a pending stylesheet holds up script execution,
      so a slow or blocked fonts.googleapis.com used to stall the dashboard
@@ -50,11 +51,11 @@
      from the first frame either way. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"
       media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=1">
+<link rel="stylesheet" href="assets/css/styles.css?v=2">
 </head>
 <body>
 
@@ -120,13 +121,18 @@
 </script>
 
 <!-- ===================== HERO ===================== -->
+<!-- The banner carries the wordmark, the line and both partner marks, so the
+     heading behind it is screen-reader only. -->
 <header class="hero">
   <div class="hero__inner">
-    <img class="hero__token" src="images/token.webp" width="480" height="480"
-         alt="The $3210 token: a blue Nokia-style phone with $3210 on its screen."
+    <h1 class="sr-only">$3210 — the phone that never dies. Buy $3210, get $NOKc.</h1>
+    <img class="hero__media"
+         src="images/banner.webp"
+         srcset="images/banner-1000.webp 1000w, images/banner.webp 1500w"
+         sizes="(max-width: 1280px) 100vw, 1240px"
+         width="1500" height="500"
+         alt="$3210 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3210. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify."
          fetchpriority="high">
-    <h1 class="hero__title">$3210</h1>
-    <p class="hero__tag">Snake, on Base.</p>
   </div>
 </header>
 
@@ -180,11 +186,11 @@
   <!-- ===================== DASHBOARD ===================== -->
   <section class="stats" id="stats" aria-label="Live token stats">
 
-    <!-- Total rewards distributed. The unit is config.js rewardTokenSymbol —
-         the ticker symbol() returns on Base — filled in by app.js. -->
+    <!-- Total $NOKc distributed. The unit after the figure is config.js
+         rewardTokenSymbol, filled in by app.js. -->
     <article class="stat" data-metric="distributed">
       <div class="stat__body">
-        <h2 class="stat__label">Total rewards distributed</h2>
+        <h2 class="stat__label">Total <span class="ticker">$NOKc</span> distributed</h2>
         <p class="stat__value"><span data-value="distributed"><span class="dots" role="img" aria-label="Loading"><i></i><i></i><i></i></span></span><span class="stat__unit" data-reward-symbol></span></p>
         <p class="stat__sub stat__sub--lead" data-chip-for="distributedUsd"><b data-value="distributedUsd"><span class="dots" role="img" aria-label="Loading"><i></i><i></i><i></i></span></b></p>
       </div>
@@ -291,7 +297,7 @@
   <section class="game" aria-labelledby="game-title">
     <div class="game__intro">
       <h2 class="game__title" id="game-title">Play Snake</h2>
-      <p class="game__lede">Tap the keys on the phone, or click it and steer with the arrow keys.</p>
+      <p class="game__lede">The phone that never dies — and neither does Snake. Tap the keys on the phone, or click it and steer with the arrow keys.</p>
       <ul class="game__keys">
         <li><kbd>2</kbd><kbd>4</kbd><kbd>6</kbd><kbd>8</kbd> or arrows <span>steer</span></li>
         <li><kbd>Enter</kbd> <span>select · pause</span></li>
@@ -348,7 +354,7 @@
       <div class="fact__body">
         <h2 class="fact__label">Token</h2>
         <p class="fact__value"><span class="fact__accent">$3210</span></p>
-        <p class="fact__sub">Snake, on Base</p>
+        <p class="fact__sub">The phone that never dies</p>
       </div>
     </div>
 
@@ -379,8 +385,8 @@
 <!-- ?v= is the cache buster: run `node scripts/stamp.mjs` on every deploy,
      which moves every ?v= here and `version` in config.js together. Skip it
      and a CDN keeps serving the previous config.js and app.js. -->
-<script src="config.js?v=1"></script>
-<script src="assets/js/app.js?v=1"></script>
-<script type="module" src="assets/js/snake/phone.js?v=1"></script>
+<script src="config.js?v=2"></script>
+<script src="assets/js/app.js?v=2"></script>
+<script type="module" src="assets/js/snake/phone.js?v=2"></script>
 </body>
 </html>
