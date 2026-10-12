@@ -1,6 +1,6 @@
 # Launch checklist — $3310
 
-Done: the page, the game, the branding, the X link, and $NOKc as the reward
+Done: the page, the game, the branding, the X link (@3310onbase), and $NOKc as the reward
 token (`0xB2000000000000000000005ac674f707E357409c`, decimals 8) in both
 configs.
 

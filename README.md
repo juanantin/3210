@@ -16,7 +16,7 @@ the behaviour they describe is the platform's.
 contract; the ticker is now **$3310**, a new token, so that contract and
 everything read off it (pool, launch block) were cleared rather than shown
 under the new name. The dashboard reads "Live data starts at launch" until
-`config.js` has the $3310 address. Still the same: the X link, the domain,
+`config.js` has the $3310 address. X is now @3310onbase. Still the same: the domain,
 and **$NOKc** (`0xB200…409c`, 8 decimals) as the reward token. The header
 clip, the share card and the coin icon still draw "$3210" into the artwork —
 they need new files for $3310. [`SETUP.md`](SETUP.md) is the checklist.

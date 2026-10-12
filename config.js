@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '11',
+  version: '12',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -85,7 +85,7 @@ window.SITE_CONFIG = {
   /* ---- Links ---------------------------------------------------------- */
 
   links: {
-    x: 'https://x.com/3210token',
+    x: 'https://x.com/3310onbase',
 
     // Leave null to auto-build a DexScreener link from the contract address.
     chart: null,
