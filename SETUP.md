@@ -81,8 +81,7 @@ Done. For the record of how each file is made:
   so browsers drop the cached files.
 - `images/phone.webp` — the phone the game is drawn on. Its LCD and key hit
   areas are measured in `assets/js/snake/phone.js`.
-- Supply in `<section class="facts">` reads **TBA** — set the real figure at
-  launch.
+- Supply in `<section class="facts">` is **1,000,000,000 (1B)**.
 - The two ecosystem lockups at the bottom of `index.html` are Stonks.Exchange
   and Stockify, as on the banner; their hrefs come from `config.js`
   `links.launchedIn` / `links.rewardsBy` once the token's own pages exist.

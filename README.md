@@ -66,7 +66,7 @@ Live at **https://3210nokc.xyz** (Vercel).
   goes back). The arrow keys belong to the page until the phone has focus,
   and a game pauses itself when it scrolls out of view.
 - **Token facts** — supply, network and ticker, written in the markup.
-  Supply reads "TBA" until launch.
+  Supply is 1,000,000,000 (1B).
 - **Ecosystem** — two partner lockups whose hrefs come from `config.js`.
 - **Footer** — the non-affiliation notice (the phone artwork resembles a
   Nokia handset; $3210 has nothing to do with Nokia or HMD Global).
