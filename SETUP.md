@@ -13,10 +13,8 @@ pool into `contracts.pool` / `CONTRACTS.pool` and the block into
 `links.launchedIn`. Market cap, liquidity, volume and holders then come
 alive on their own.
 
-**2. Artwork.** The header clip (`images/header.*`), the share card
-(`images/social.jpg`) and the icons are drawn from $3210 art — the ticker is
-in the pixels. Replace the originals in `images/src/` and regenerate (the
-commands are in `images/src/README.md`).
+**2. Artwork.** Done: the header, the share card and the icons all come
+from the $3310 header (`images/src/README.md` says how).
 
 **3. The rewards index and the holders' share**, once Stockify has an index
 for $3310:
@@ -94,13 +92,12 @@ setting on the platform's panel, and artwork.
 
 Done. For the record of how each file is made:
 
-- `images/src/banner_master.jpg` is the banner as supplied (1500×500); the
-  share card `images/social.jpg` comes from it, and `index.html` points
-  `og:image`, `twitter:image` and `og:url` at it on https://3210nokc.xyz.
-- `images/src/token_master.webp` is the coin; every icon is derived from it
-  (trimmed, transparent, the Apple one flattened onto the page navy). After
-  changing any of them run `node scripts/stamp.mjs`, which moves every `?v=`
-  so browsers drop the cached files.
+- `images/src/header_master.webp` is the $3310 header as supplied (810×540);
+  the hero, the share card `images/social.jpg` and every icon come from it,
+  and `index.html` points `og:image`, `twitter:image` and `og:url` at
+  https://3210nokc.xyz. After changing any of them run
+  `node scripts/stamp.mjs`, which moves every `?v=` so browsers drop the
+  cached files.
 - `images/phone.webp` — the phone the game is drawn on. Its LCD and key hit
   areas are measured in `assets/js/snake/phone.js`.
 - Supply in `<section class="facts">` is **1,000,000,000 (1B)**.

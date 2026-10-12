@@ -8,10 +8,8 @@
 
 <!-- The social card, at absolute URLs on the site's domain: a scraper
      fetches these from its own servers, with no page to resolve a relative
-     path against. images/
-     social.jpg is the banner, whole, on 1200×630 — a 3:1 image loses its
-     edges to a card's 2:1 crop, so its top and bottom are extended into the
-     ground instead. -->
+     path against. images/social.jpg is the 3:2 header, whole, at the card's
+     full height, centred on a blurred stretch of itself out to 1200×630. -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://3210nokc.xyz/">
 <link rel="canonical" href="https://3210nokc.xyz/">
@@ -22,25 +20,25 @@
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="$3310 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3310. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify.">
+<meta property="og:image:alt" content="$3310 — the phone that never dies. A blue Nokia 3310 with Snake on its screen, on a glowing blue stage, beside BUY $3310. GET $NOKc., on Base.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@3310onbase">
 <meta name="twitter:image" content="https://3210nokc.xyz/images/social.jpg">
-<meta name="twitter:image:alt" content="$3310 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3310. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify.">
+<meta name="twitter:image:alt" content="$3310 — the phone that never dies. A blue Nokia 3310 with Snake on its screen, on a glowing blue stage, beside BUY $3310. GET $NOKc., on Base.">
 <meta name="theme-color" content="#000e27">
 
 <!-- favicon.ico sits at the root because browsers request /favicon.ico on
      their own, regardless of these tags. Every icon is generated from
-     images/src/token_master.webp — the round token, trimmed and left
+     images/src/header_master.webp — the phone's head cut to a circle, left
      transparent; the Apple one is flattened onto white, because iOS renders a
      transparent home-screen icon as black.
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=12" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=12">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=12">
-<link rel="manifest" href="site.webmanifest?v=12">
+<link rel="icon" href="favicon.ico?v=13" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=13">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=13">
+<link rel="manifest" href="site.webmanifest?v=13">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -58,7 +56,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=12">
+<link rel="stylesheet" href="assets/css/styles.css?v=13">
 </head>
 <body>
 
@@ -133,49 +131,22 @@
 <div class="fold">
 
 <!-- ===================== HERO ===================== -->
-<!-- The header clip carries the wordmark and the line, so the heading behind
-     it is screen-reader only.
-
-     The poster is the clip's OWN FIRST FRAME, so poster → playback is
-     seamless. The clip is 672×448 (3:2), 10s, audio-stripped, in H.264 and
-     VP9 — it is muted
-     and looping, so a track is dead weight. That ratio is encoded here and
-     again as the hero's aspect-ratio in the stylesheet: change both together
-     or object-fit will crop. The source is attached by the script below only
-     when the viewer has not asked for reduced motion; otherwise nothing
-     downloads and the poster stands in as a still header. -->
+<!-- The header image carries the wordmark and the line, so the heading
+     behind it is screen-reader only. It is 810×540 (3:2); that ratio is
+     encoded here and again as the hero's aspect-ratio in the stylesheet, so
+     change both together or object-fit will crop. -->
 <header class="hero">
   <div class="hero__inner">
     <h1 class="sr-only">$3310 — the phone that never dies. Buy $3310, get $NOKc.</h1>
     <!-- The stage is exactly the clip: the overlays below are placed against it
          in container units, so they track the artwork at any width. -->
     <div class="hero__stage">
-    <video
-      class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=12"
-      width="672" height="448"
-      autoplay muted loop playsinline preload="none"
-      aria-label="$3310 — the phone that never dies. A blue Nokia-style phone on a glowing blue stage, its screen cycling through Snake and the ticker, beside the line "Buy, get $NOKc", on Base."
-      data-src="images/header.mp4?v=12"
-      data-src-webm="images/header.webm?v=12"></video>
-
-    <script>
-      (function () {
-        var v = document.getElementById('hero-video');
-        if (!v.dataset.src) return;
-        var still = !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        if (still) return;
-        // VP9 where the browser has it (smaller, and the only option in
-        // browsers built without H.264), the mp4 everywhere else.
-        var webm = v.dataset.srcWebm && v.canPlayType('video/webm; codecs="vp9"');
-        v.src = webm ? v.dataset.srcWebm : v.dataset.src;
-        v.preload = 'auto';
-        v.load();
-        // Autoplay can be declined (data saver, low power); the poster stays.
-        var p = v.play();
-        if (p && p.catch) p.catch(function () {});
-      })();
-    </script>
+    <img
+      class="hero__media"
+      src="images/header.webp?v=13"
+      width="810" height="540"
+      alt="$3310 — the phone that never dies. A blue Nokia 3310 with Snake on its screen, on a glowing blue stage, beside BUY $3310. GET $NOKc., on Base."
+      fetchpriority="high">
 
     <!-- Sits on the clip's reflection, below the phone, where it covers no
          type. A plain link, so it works without JavaScript too. -->
@@ -469,8 +440,8 @@
     });
   })();
 </script>
-<script src="config.js?v=12"></script>
-<script src="assets/js/app.js?v=12"></script>
-<script type="module" src="assets/js/snake/phone.js?v=12"></script>
+<script src="config.js?v=13"></script>
+<script src="assets/js/app.js?v=13"></script>
+<script type="module" src="assets/js/snake/phone.js?v=13"></script>
 </body>
 </html>

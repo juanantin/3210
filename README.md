@@ -17,9 +17,8 @@ contract; the ticker is now **$3310**, a new token, so that contract and
 everything read off it (pool, launch block) were cleared rather than shown
 under the new name. The dashboard reads "Live data starts at launch" until
 `config.js` has the $3310 address. X is now @3310onbase. Still the same: the domain,
-and **$NOKc** (`0xB200…409c`, 8 decimals) as the reward token. The header
-clip, the share card and the coin icon still draw "$3210" into the artwork —
-they need new files for $3310. [`SETUP.md`](SETUP.md) is the checklist.
+and **$NOKc** (`0xB200…409c`, 8 decimals) as the reward token. The header,
+the share card and the icons are the $3310 artwork. [`SETUP.md`](SETUP.md) is the checklist.
 
 ```
 index.html            markup
@@ -46,14 +45,10 @@ Live at **https://3210nokc.xyz** (Vercel).
   `#hash` in the address is dropped on load, and "Play Snake" scrolls to the
   game without writing `#play` into the address.
 
-- **Hero** — the header clip (`images/header.mp4`, H.264, and
-  `images/header.webm`, VP9 — the page picks whichever the browser plays),
-  looping silently and carrying the wordmark, "The phone that never dies."
-  and "Buy $3310. Get $NOKc." The `<h1>` behind it is screen-reader only. The
-  poster is the clip's own first frame, so poster → playback is seamless;
-  visitors with `prefers-reduced-motion: reduce` get the poster as a still and
-  the video never downloads. 672×448 is small, so the hero tops out at 960px
-  wide; its top glow and bottom reflection fade into the page.
+- **Hero** — the header image (`images/header.webp`, 810×540): the $3310
+  wordmark, "The phone that never dies." and "Buy $3310. Get $NOKc." The
+  `<h1>` behind it is screen-reader only. The hero tops out at 960px wide and
+  scales to the viewport height; its edges fade into the page.
 - **Actions** — three buttons: X, the chart, and a button that copies the CA
   and flashes a confirmation. Before launch the chart and copy buttons say so
   instead of opening an empty page.
@@ -333,21 +328,16 @@ cd worker && npm test
 ## Notes
 
 - Every icon (`favicon.ico` at the root, `images/favicon.png`, the two
-  manifest icons and `images/apple-touch-icon.png`) is generated from
-  `images/src/token_master.webp`, trimmed to the coin and left transparent —
-  except the Apple one, flattened onto the page navy because iOS renders a
-  transparent home-screen icon as black. Bump the `?v=` with
-  `node scripts/stamp.mjs` when the mark changes.
-- The header clip came as a 10s 672×448 mp4 with an audio track and a cover
-  image; `images/header.mp4` is its video only (CRF 22, faststart — 1.4 MB →
-  0.6 MB) and `images/header.webm` the same in VP9 (0.5 MB). The commands are
-  in `images/src/README.md`. Its ratio is encoded twice — the `width`/`height`
-  on the `<video>` and `.hero__media`'s `aspect-ratio` — change both together.
+  manifest icons and `images/apple-touch-icon.png`) is the phone's head from
+  the header — earpiece, NOKIA and the Snake screen — cut to a circle and
+  left transparent, except the Apple one, flattened onto the page navy
+  because iOS renders a transparent home-screen icon as black. Bump the `?v=`
+  with `node scripts/stamp.mjs` when the mark changes; the crop is in
+  `images/src/README.md`.
 - The share card and `og:url` are absolute URLs on `https://3210nokc.xyz` —
   change them in `index.html` if the domain ever moves.
-- `images/social.jpg` is the 1200×630 share card: the banner whole, its top
-  and bottom rows extended and faded into the ground — a 3:1 banner cropped to
-  a card's 2:1 would lose its corner marks.
+- `images/social.jpg` is the 1200×630 share card: the 3:2 header whole at
+  full height, centred on a blurred stretch of itself.
 - `images/stonkex_button.png` and `images/stockify_logo.png` are the partner
   lockups with their dark wordmarks turned white for the dark page (the icons
   are untouched), matching how the banner shows them. Once the site has its final domain, make the `og:image`,

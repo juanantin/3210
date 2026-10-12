@@ -206,21 +206,21 @@ a { color: inherit; text-decoration: none; }
   overflow: hidden;
 }
 
-/* The header clip IS the hero, as on $BLUE: it carries the wordmark and the
+/* The header image IS the hero, as on $BLUE: it carries the wordmark and the
    line, so the page's <h1> is screen-reader only. Its ground is the page's
    navy, so it needs no frame: the glow at its top and the reflection at its
    bottom fade into the page, and the sides only barely, because "$3310"
    starts 3% in from the left edge.
 
-   672×448 is a small clip; at 960px it is already scaled up 1.4×, so the
-   hero stops there rather than growing to the full 1240 the banner had. */
+   The image is 810×540, so the hero stops at 960px rather than scaling it
+   up any further. */
 .hero__inner {
   /* 960px at most, and never so tall that the dashboard falls below the
      fold: the clip is 3:2, so its height is 2/3 of this width, and the
      dashboard with its legend needs about 230px under it. svh, so a phone's
      collapsing toolbar cannot push it off; vh where svh is unsupported. */
   max-width: min(960px, calc((100vh - 230px) * 1.5));
-  max-width: min(960px, calc((100svh - 230px) * 1.5));
+  max-width: min(960px, calc((100svh - 230px) * 1.5));   /* = --stage-w on .hero */
   margin: 0 auto;
 }
 
@@ -228,15 +228,15 @@ a { color: inherit; text-decoration: none; }
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 2;    /* 672×448 — the clip's own ratio, and the poster's.
+  aspect-ratio: 3 / 2;    /* 810×540 — the header image's own ratio.
                              Encoded on the element as well: change both. */
   object-fit: cover;
   background: var(--page);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 2.6%, #000 97.4%, transparent),
-                      linear-gradient(180deg, transparent, #000 8%, #000 86%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 .6%, #000 99.4%, transparent),
+                      linear-gradient(180deg, transparent, #000 6%, #000 88%, transparent);
   -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(90deg, transparent, #000 2.6%, #000 97.4%, transparent),
-              linear-gradient(180deg, transparent, #000 8%, #000 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 .6%, #000 99.4%, transparent),
+              linear-gradient(180deg, transparent, #000 6%, #000 88%, transparent);
   mask-composite: intersect;
 }
 
@@ -246,6 +246,31 @@ a { color: inherit; text-decoration: none; }
 .hero__stage {
   position: relative;
   container-type: inline-size;
+}
+
+/* The header's ground is a lighter navy than the page, and its type sits too
+   close to the sides to fade them out. So a band behind it continues the
+   image's own edge colours — sampled down its outer columns: #02255b at the
+   top, #001233 through the middle, #011b49 near the floor — and fades away
+   sideways over ~240px, so the image has no seam at either side. The band is
+   exactly the image's height, placed off the same --stage-w the image uses. */
+.hero {
+  position: relative;
+  --stage-w: min(960px, calc((100vh - 230px) * 1.5), calc(100vw - 40px));
+  --stage-w: min(960px, calc((100svh - 230px) * 1.5), calc(100vw - 40px));
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 8px;                                   /* the hero's own top padding */
+  height: calc(var(--stage-w) * 2 / 3);
+  z-index: -1;
+  background: linear-gradient(180deg, #02255b 0%, #011d51 10%, #001943 25%, #011535 40%, #001233 55%, #011535 75%, #001c4b 85%, #011b49 92%, #000e27 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent calc(50% - var(--stage-w) / 2 - 240px), #000 calc(50% - var(--stage-w) / 2 + 2px), #000 calc(50% + var(--stage-w) / 2 - 2px), transparent calc(50% + var(--stage-w) / 2 + 240px));
+  mask-image: linear-gradient(90deg, transparent calc(50% - var(--stage-w) / 2 - 240px), #000 calc(50% - var(--stage-w) / 2 + 2px), #000 calc(50% + var(--stage-w) / 2 - 2px), transparent calc(50% + var(--stage-w) / 2 + 240px));
+  pointer-events: none;
 }
 
 /* "Play Snake", low on the clip's reflection: below the phone and clear of
