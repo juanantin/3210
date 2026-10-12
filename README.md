@@ -12,11 +12,13 @@ sources, the indexer and the deploy setup are that site's, re-pointed. Where a
 lesson below quotes another token's numbers, those numbers are the evidence —
 the behaviour they describe is the platform's.
 
-**Status: pre-launch.** The X link and the reward ticker ($NOKc) are set;
-the contract address, the rewards index and everything derived from them are
-not, so every dashboard card shows
-`—` and the indexer refuses to run. [`SETUP.md`](SETUP.md) is the checklist
-for filling them in.
+**Status: launched.** Contract `0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35`
+on Base, trading against **$NOKc** (`0xB200…409c`, 8 decimals) in its only
+pool, Aerodrome Slipstream `0x2Ec5…03a1`, launched at block 52,516,217 — all
+read off the network by `discover.yml`, not assumed. Market cap, liquidity,
+volume and holders are live. Fees collected and $NOKc distributed wait on one
+thing: the platform had **no rewards index routed** for $3210 when discovery
+ran, so there is no distributor to watch yet — see [`SETUP.md`](SETUP.md).
 
 ```
 index.html            markup
@@ -100,7 +102,17 @@ renders as `—` rather than as a number that isn't real.
 | Total fees collected | the indexer (see below) | live, scheduled |
 | Total rewards distributed | the indexer (see below) | live, scheduled |
 
-### Market data — DexScreener
+### Market data — DexScreener, and the pool itself
+
+$3210's only pair is quoted in $NOKc, which DexScreener cannot price — so it
+resolves the pair and its 24h volume but reports no dollar market cap or
+liquidity. When that happens the page derives both rather than showing
+dashes: the pool's own price gives $3210 in $NOKc, the $NOKc dollar price
+comes from GeckoTerminal (the reward-price chain below), the supply is fixed
+(`totalSupply` in `config.js`), and the pool's balance of each side is read
+off Base with two `balanceOf` calls (`tokenDecimals` / `rewardTokenDecimals`).
+Anything DexScreener does report outranks the derived figures.
+
 
 The configured pool is queried first — `GET /latest/dex/pairs/base/<pool>` —
 falling back to the token search, `GET /latest/dex/tokens/<contract>`. Public,

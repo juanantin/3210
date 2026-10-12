@@ -1029,6 +1029,52 @@
     }
   }
 
+  /* The pool's own balance of each side, read off the chain with two
+     balanceOf calls. Used only to value liquidity when DexScreener has no
+     dollar figure for the pair — which it cannot have while it has no price
+     for the reward token, as on a pair quoted in $NOKc. */
+  var SEL_BALANCE_OF = '0x70a08231';
+
+  function sourcePoolBalances() {
+    var pool = (CFG.contracts || {}).pool;
+    var reward = CFG.rewardTokenAddress;
+    var urls = ((SRC.holders || {}).onchain || {}).rpcUrls || [];
+    var dMe = Number(CFG.tokenDecimals), dReward = Number(CFG.rewardTokenDecimals);
+    if (!pool || !reward || !address || !urls.length || !isFinite(dMe) || !isFinite(dReward)) {
+      return Promise.resolve(null);
+    }
+    var data = SEL_BALANCE_OF + '000000000000000000000000' + String(pool).slice(2).toLowerCase();
+    function bal(url, token, decimals) {
+      return rpcCall(url, 'eth_call', [{ to: token, data: data }, 'latest']).then(function (hex) {
+        return toTokens(BigInt(hex && hex !== '0x' ? hex : '0x0'), decimals);
+      });
+    }
+    if (typeof BigInt !== 'function') return Promise.resolve(null);
+    return softly('pool:balances', pickRpc(urls).then(function (node) {
+      if (!node) throw new Error('no RPC answered');
+      return Promise.all([bal(node.url, address, dMe), bal(node.url, reward, dReward)]);
+    }).then(function (b) {
+      return { _poolBalances: { me: b[0], reward: b[1] } };
+    })).then(function (v) { return v === undefined ? null : v; });
+  }
+
+  /* What one $3210 is worth in the reward token, from the pool's own price.
+     A pair prices its BASE in units of its QUOTE (priceNative), so the
+     answer is that price when $3210 is the base and its inverse when the
+     reward token is — and nothing at all for a pair of any other two. */
+  function tokenInReward(pair) {
+    if (!pair || !CFG.rewardTokenAddress) return null;
+    var me = String(address).toLowerCase();
+    var reward = String(CFG.rewardTokenAddress).toLowerCase();
+    var base = pair.baseToken && String(pair.baseToken.address || '').toLowerCase();
+    var quote = pair.quoteToken && String(pair.quoteToken.address || '').toLowerCase();
+    var native = num(pair.priceNative);
+    if (native === null || native <= 0) return null;
+    if (base === me && quote === reward) return native;
+    if (base === reward && quote === me) return 1 / native;
+    return null;
+  }
+
   function sourceRewardPrice() {
     var token = CFG.rewardTokenAddress;
     if (!token) return Promise.resolve(null);
@@ -1283,6 +1329,7 @@
     var rewardPrice = null;
     var detectedToken = null;   // what the chain says the fees are paid in
     var priceToken = null;      // which token the price in hand belongs to
+    var poolBalances = null;    // the pool's own balance of each side, in tokens
     var live = 0;
     var chainLive = false;      // did the scan itself finish and publish?
 
@@ -1322,6 +1369,20 @@
       if (typeof stats.feesTokens === 'number' && stale('fees')) {
         stats.fees = stats.feesTokens * rewardPrice;
       }
+
+      /* Market cap and liquidity, when DexScreener resolved the pair but had
+         no dollar figure for it. The pool's own price gives $3210 in the
+         reward token, the reward token's dollar price does the rest; the
+         supply is fixed, and the pool's balances are read off the chain.
+         Anything DexScreener does report outranks these. */
+      var each = tokenInReward(poolPair);
+      if (each === null) return;
+      var usdEach = each * rewardPrice;
+      var supply = Number(CFG.totalSupply);
+      if (supply > 0 && stale('marketCap')) stats.marketCap = supply * usdEach;
+      if (poolBalances && stale('liquidity')) {
+        stats.liquidity = poolBalances.me * usdEach + poolBalances.reward * rewardPrice;
+      }
     }
 
     function absorb(rank, part) {
@@ -1332,6 +1393,7 @@
           stats._rewardSymbol = part._rewardSymbol;
         }
         if (part._flowNote) stats._flowNote = part._flowNote;
+        if (part._poolBalances) poolBalances = part._poolBalances;
         if (part._rewardPrice) {
           rewardPrice = part._rewardPrice;
           priceToken = part._priceToken || null;
@@ -1367,6 +1429,7 @@
       [RANK.dexscreener, sourceDexScreener()],
       [RANK.rewards, sourceRewards()],
       [RANK.rewardPrice, sourceRewardPrice()],
+      [RANK.rewardPrice, sourcePoolBalances()],
       [RANK.chain, sourceHolders()],
     ];
 

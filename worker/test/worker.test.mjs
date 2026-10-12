@@ -23,12 +23,12 @@ const E18 = 10n ** 18n;
    a wrong scale — it agrees with whatever it is given, goes green, and leaves
    every reward figure on the site out by a power of ten.
 
-   TODO for $3210: set this to the reward token's decimals() as read on chain
-   by the discovery run, not assumed from 18 being the usual answer. On $BOX this constant was 8 (AMZNc), and the 18 that looked obvious
+   For $3210 the reward token is $NOKc, whose decimals() returns 8 — read on
+   chain by the discovery run, not assumed. On $BOX this constant was 8 (AMZNc), and the 18 that looked obvious
    there published 25.244695737 as 2.5e-9. So: when this repo is pointed at a
    new token, this line changes to that token's reading, and this test failing
    after a config change is the whole point of it. */
-const EKEX = 10n ** 18n;
+const EKEX = 10n ** 8n;    // $NOKc: decimals() 8, read on chain by discover.yml
 
 function fakeKV() {
   const store = new Map();

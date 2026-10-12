@@ -17,31 +17,33 @@ export const CHAIN_ID = 8453;                    // Base
 export const TOKENS = {
   // The token people buy — $3210
   STR: '0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
-  // TODO: the reward token holders are paid in
-  KEX: null,
+  // $NOKc, the reward token holders are paid in. symbol() "NOKc", name()
+  // "Nokia Corporation", decimals() 8 — read on chain by discover.yml.
+  KEX: '0xB2000000000000000000005ac674f707E357409c',
 };
 
 export const CONTRACTS = {
-  // TODO: the trading pair, the deepest one for $3210.
-  pool: null,
-  // TODO: where trading fees accrue. Usually SHARED BY EVERY COIN on a launch
-  // platform, so no stream may sum it — it is only excluded from holders.
-  feeLocker: null,
+  // $3210/$NOKc on Aerodrome Slipstream, the token's only pair.
+  pool: '0x2Ec52131c560105143E0Af64578a85cc74D503a1',
+  // Where trading fees accrue, from /api/coins. SHARED BY EVERY COIN launched
+  // on this venue, so no stream may sum it — it is only excluded from holders.
+  feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
   // TODO: the rewards index — the distributor holders are paid from, the one
   // address here that is $3210's alone. Every stream below watches it.
+  // /api/fee-routing returned no route for $3210 when discovery ran.
   rewardsIndex: null,
 };
 
-// TODO: the block $3210 launched at. The scan starts here; left null it never
-// runs, and left at 0 it would start at genesis and never finish.
-export const START_BLOCK = null;
+// The block $3210 launched at — /api/coins block_number. Nothing relevant
+// happened before it, so the scan starts here rather than at genesis.
+export const START_BLOCK = 52516217;
 
 /* Decimals, per token, READ FROM EACH CONTRACT rather than assumed — two
    constants, not one, because they can differ: a sibling site's reward token
    returns 8 where its token returns 18, and sharing one constant published a
    figure ten billion times too small. */
 export const STR_DECIMALS = 18;
-export const KEX_DECIMALS = null;
+export const KEX_DECIMALS = 8;   // $NOKc: decimals() returns 8, read on chain
 
 /* Everything that has to be real before a scan means anything. index-rewards
    and the worker both refuse to run while this list is non-empty, because the

@@ -1,12 +1,25 @@
 # Launch checklist — $3210
 
-What is left between this repo and a live dashboard. Already done: the page,
-the game, the branding and icons, and the X link (`https://x.com/3210token`).
-Everything below waits on the **contract address** and the **rewards index**.
+Done: the page, the game, the branding, the X link, the contract address
+(`0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35`), the Stonks.Exchange link, and
+everything `discover.yml` read off the network — the $NOKc reward token (8
+decimals), the pool, the fee locker and the launch block — in both
+`config.js` and `worker/src/config.js`. Market cap, liquidity, volume and
+holders are live.
 
-After step 1 the market cards (market cap, liquidity, volume) and the holder
-count come alive on their own; steps 3 and 4 are what fill fees collected and
-rewards distributed.
+**Left: the rewards index and the holders' share.** When discovery ran, the
+platform's `/api/fee-routing` had no route for $3210, so there is no
+distributor yet. Once Stockify has an index for it:
+
+1. put its address in `config.js` `contracts.rewardsIndex` and
+   `worker/src/config.js` `CONTRACTS.rewardsIndex`, and its page in
+   `links.rewardsBy`
+2. set `holderShare` / `HOLDER_SHARE` from the index's own panel ("TO
+   HOLDERS 90%" on $BLUE's)
+3. seed `data/rewards-state.json` with `{"cursor": 52516217}` and uncomment
+   the schedule in `.github/workflows/index-rewards.yml`
+
+`MISSING` in `worker/src/config.js` then empties and the indexer starts.
 
 ## 0. Let the network answer first
 

@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '9',
+  version: '10',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -20,15 +20,24 @@ window.SITE_CONFIG = {
   // button links to it, and DexScreener is searched by it.
   contractAddress: '0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
 
-  // TODO: the token holders are paid in (the quote side of the pair on
-  // platforms that pay in it). Prices "total distributed" in USD. Read it off
-  // the discover workflow's output rather than assuming it.
-  rewardTokenAddress: null,
+  // $NOKc, the token holders are paid in — the other side of the pool. Read
+  // off Base by the discover workflow: symbol() "NOKc", name() "Nokia
+  // Corporation", decimals() 8 (not 18 — the indexer keeps them apart).
+  rewardTokenAddress: '0xB2000000000000000000005ac674f707E357409c',
 
-  // The reward token, as the banner names it: "BUY $3210. GET $NOKc."
-  // Matched as a substring of the reward token's own symbol() and shown after
-  // the reward amounts. Confirm it against symbol() once the address is known.
+  // The reward token's symbol() exactly, as read on chain — and as the banner
+  // names it: "BUY $3210. GET $NOKc." Shown after the reward amounts.
   rewardTokenSymbol: 'NOKc',
+
+  // Fixed at launch: totalSupply() reads 1,000,000,000 (18 decimals). Used to
+  // turn the pool's price into a market cap when DexScreener has no dollar
+  // figure for the pair — it cannot price $NOKc on its own.
+  totalSupply: 1000000000,
+
+  // decimals() of each, read on chain — used to read the pool's balances, so
+  // liquidity can be valued when DexScreener has no dollar figure for it.
+  tokenDecimals: 18,
+  rewardTokenDecimals: 8,
 
   // Free, keyless, CORS-enabled. The last price source, because it covers
   // tokens DexScreener has no pair for.
@@ -37,9 +46,9 @@ window.SITE_CONFIG = {
   chain: 'base',    // DexScreener chain slug
   chainId: 8453,    // EVM chain id
 
-  // TODO: the block $3210 launched at. The chain scan starts here and is
-  // skipped while this is null — never put another token's block here.
-  launchBlock: null,
+  // The block $3210 launched at, from the platform's own /api/coins entry
+  // (block_number). The holder scan starts here.
+  launchBlock: 52516217,
 
   // TODO: holders' share of what leaves the rewards index; the rest is the
   // protocol's cut. Read it off the token's own rewards panel. While null the
@@ -56,9 +65,15 @@ window.SITE_CONFIG = {
                     SHARED by every token, so it is excluded, never summed
        rewardsIndex the distributor holders are paid from: the index */
   contracts: {
-    pool: null,
+    // $3210/$NOKc on Aerodrome Slipstream — the token's only pair, named by
+    // both DexScreener and the platform's /api/coins entry.
+    pool: '0x2Ec52131c560105143E0Af64578a85cc74D503a1',
     rewardPool: null,
-    feeLocker: null,
+    // The platform's fee locker for this venue. Excluded from holders, never
+    // summed: it is shared by every coin launched the same way.
+    feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
+    // TODO: the Stockify index. The platform's /api/fee-routing had no route
+    // for $3210 when discovery ran, so there is no distributor to watch yet.
     rewardsIndex: null,
   },
 
