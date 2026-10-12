@@ -45,10 +45,15 @@ Live at **https://3210nokc.xyz** (Vercel).
   `#hash` in the address is dropped on load, and "Play Snake" scrolls to the
   game without writing `#play` into the address.
 
-- **Hero** — the header image (`images/header.webp`, 810×540): the $3310
-  wordmark, "The phone that never dies." and "Buy $3310. Get $NOKc." The
-  `<h1>` behind it is screen-reader only. The hero tops out at 960px wide and
-  scales to the viewport height; its edges fade into the page.
+- **Hero** — the header clip (`images/header.mp4`, H.264, and
+  `images/header.webm`, VP9 — the page picks whichever the browser plays),
+  1080×720, 5s, looping silently: the $3310 wordmark, "The phone that never
+  dies." and "Buy $3310. Get $NOKc.", the phone's screen cycling through
+  Snake, BUY and $3310. The poster is its own first frame; visitors with
+  `prefers-reduced-motion: reduce` get the poster as a still and the video
+  never downloads. The hero tops out at 960px wide and scales to the
+  viewport height; a band in the clip's edge colours carries it out to the
+  sides.
 - **Actions** — three buttons: X, the chart, and a button that copies the CA
   and flashes a confirmation. Before launch the chart and copy buttons say so
   instead of opening an empty page.

@@ -29,16 +29,16 @@
 
 <!-- favicon.ico sits at the root because browsers request /favicon.ico on
      their own, regardless of these tags. Every icon is generated from
-     images/src/header_master.webp — the phone's head cut to a circle, left
-     transparent; the Apple one is flattened onto white, because iOS renders a
+     images/src/header_still_master.webp — the phone's head cut to a circle, left
+     transparent; the Apple one is flattened onto the page navy, because iOS renders a
      transparent home-screen icon as black.
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=13" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=13">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=13">
-<link rel="manifest" href="site.webmanifest?v=13">
+<link rel="icon" href="favicon.ico?v=14" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=14">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=14">
+<link rel="manifest" href="site.webmanifest?v=14">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -56,7 +56,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=13">
+<link rel="stylesheet" href="assets/css/styles.css?v=14">
 </head>
 <body>
 
@@ -131,22 +131,44 @@
 <div class="fold">
 
 <!-- ===================== HERO ===================== -->
-<!-- The header image carries the wordmark and the line, so the heading
-     behind it is screen-reader only. It is 810×540 (3:2); that ratio is
-     encoded here and again as the hero's aspect-ratio in the stylesheet, so
-     change both together or object-fit will crop. -->
+<!-- The header clip carries the wordmark and the line, so the heading
+     behind it is screen-reader only. It is 1080×720 (3:2), 5s, looping and
+     silent, in H.264 and VP9; the poster is its own first frame, so poster →
+     playback is seamless. The ratio is encoded here and again as the hero's
+     aspect-ratio in the stylesheet: change both together or object-fit will
+     crop. -->
 <header class="hero">
   <div class="hero__inner">
     <h1 class="sr-only">$3310 — the phone that never dies. Buy $3310, get $NOKc.</h1>
     <!-- The stage is exactly the clip: the overlays below are placed against it
          in container units, so they track the artwork at any width. -->
     <div class="hero__stage">
-    <img
-      class="hero__media"
-      src="images/header.webp?v=13"
-      width="810" height="540"
-      alt="$3310 — the phone that never dies. A blue Nokia 3310 with Snake on its screen, on a glowing blue stage, beside BUY $3310. GET $NOKc., on Base."
-      fetchpriority="high">
+    <video
+      class="hero__media" id="hero-video"
+      poster="images/header_poster.webp?v=14"
+      width="1080" height="720"
+      autoplay muted loop playsinline preload="none"
+      aria-label="$3310 — the phone that never dies. A blue Nokia 3310 on a glowing blue stage, its screen cycling through Snake, BUY and $3310, beside BUY $3310. GET $NOKc., on Base."
+      data-src="images/header.mp4?v=14"
+      data-src-webm="images/header.webm?v=14"></video>
+
+    <script>
+      (function () {
+        var v = document.getElementById('hero-video');
+        if (!v.dataset.src) return;
+        // Asked for less motion: the poster stays as a still and nothing downloads.
+        var still = !window.matchMedia || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (still) return;
+        // VP9 where the browser has it (smaller), the mp4 everywhere else.
+        var webm = v.dataset.srcWebm && v.canPlayType('video/webm; codecs="vp9"');
+        v.src = webm ? v.dataset.srcWebm : v.dataset.src;
+        v.preload = 'auto';
+        v.load();
+        // Autoplay can be declined (data saver, low power); the poster stays.
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      })();
+    </script>
 
     <!-- Sits on the clip's reflection, below the phone, where it covers no
          type. A plain link, so it works without JavaScript too. -->
@@ -440,8 +462,8 @@
     });
   })();
 </script>
-<script src="config.js?v=13"></script>
-<script src="assets/js/app.js?v=13"></script>
-<script type="module" src="assets/js/snake/phone.js?v=13"></script>
+<script src="config.js?v=14"></script>
+<script src="assets/js/app.js?v=14"></script>
+<script type="module" src="assets/js/snake/phone.js?v=14"></script>
 </body>
 </html>

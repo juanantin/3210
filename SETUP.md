@@ -92,8 +92,9 @@ setting on the platform's panel, and artwork.
 
 Done. For the record of how each file is made:
 
-- `images/src/header_master.webp` is the $3310 header as supplied (810×540);
-  the hero, the share card `images/social.jpg` and every icon come from it,
+- `images/src/header_master.mp4` is the $3310 header clip (the hero's mp4,
+  webm and poster); `images/src/header_still_master.webp` the same header as
+  a still, which the share card `images/social.jpg` and every icon come from,
   and `index.html` points `og:image`, `twitter:image` and `og:url` at
   https://3210nokc.xyz. After changing any of them run
   `node scripts/stamp.mjs`, which moves every `?v=` so browsers drop the
