@@ -15,8 +15,8 @@
 export const CHAIN_ID = 8453;                    // Base
 
 export const TOKENS = {
-  // TODO: the token people buy — $3210
-  STR: null,
+  // The token people buy — $3210
+  STR: '0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
   // TODO: the reward token holders are paid in
   KEX: null,
 };

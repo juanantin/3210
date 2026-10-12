@@ -12,14 +12,13 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '8',
+  version: '9',
 
   /* ---- Token ---------------------------------------------------------- */
 
-  // TODO: the $3210 contract address on Base. The CA button copies this, the
-  // chart button links to it, and DexScreener is searched by it. Nothing on
-  // the dashboard resolves without it.
-  contractAddress: '',
+  // The $3210 contract address on Base. The CA button copies this, the chart
+  // button links to it, and DexScreener is searched by it.
+  contractAddress: '0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
 
   // TODO: the token holders are paid in (the quote side of the pair on
   // platforms that pay in it). Prices "total distributed" in USD. Read it off
@@ -71,10 +70,10 @@ window.SITE_CONFIG = {
     // Leave null to auto-build a DexScreener link from the contract address.
     chart: null,
 
-    // TODO: the two lockups in the footer panel — the token's own page on
-    // Stonks.Exchange and its Stockify index. Until set they point at the
-    // platforms' home pages.
-    launchedIn: null,
+    // The two lockups in the footer panel: the token's own page on
+    // Stonks.Exchange, and (TODO) its Stockify index — until that is set the
+    // Stockify lockup points at the platform's home page.
+    launchedIn: 'https://www.thestonks.exchange/token/0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
     rewardsBy: null,
   },
 
