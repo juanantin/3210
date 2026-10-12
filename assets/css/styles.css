@@ -79,12 +79,11 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 
-  /* The banner's glow from above, then the faint isometric cubes behind
-     everything — drawn rather than shipped, so crisp at any zoom and free. */
-  background-image: radial-gradient(70% 520px at 50% 0, rgba(36, 89, 159, .55), transparent 70%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%232a9bfc' stroke-opacity='.07' stroke-width='1'%3E%3Cpath d='M30 0 60 17v34L30 68 0 51V17Z'/%3E%3Cpath d='M0 17l30 17 30-17M30 34v34'/%3E%3Cpath d='M90 52l30 17v34l-30 17-30-17V69Z'/%3E%3Cpath d='M60 69l30 17 30-17M90 86v34'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: no-repeat, repeat;
-  background-position: center top, center top;
+  /* The faint isometric cubes behind everything — drawn rather than shipped,
+     so crisp at any zoom and free. No glow of its own: the header clip
+     brings its own, and a page glow under the clip's faded edges shows them. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%232a9bfc' stroke-opacity='.07' stroke-width='1'%3E%3Cpath d='M30 0 60 17v34L30 68 0 51V17Z'/%3E%3Cpath d='M0 17l30 17 30-17M30 34v34'/%3E%3Cpath d='M90 52l30 17v34l-30 17-30-17V69Z'/%3E%3Cpath d='M60 69l30 17 30-17M90 86v34'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: center top;
 }
 
 img { max-width: 100%; height: auto; display: block; }
@@ -220,7 +219,7 @@ a { color: inherit; text-decoration: none; }
      dashboard with its legend needs about 230px under it. svh, so a phone's
      collapsing toolbar cannot push it off; vh where svh is unsupported. */
   max-width: min(960px, calc((100vh - 230px) * 1.5));
-  max-width: min(960px, calc((100svh - 230px) * 1.5));   /* = --stage-w on .hero */
+  max-width: min(960px, calc((100svh - 230px) * 1.5));
   margin: 0 auto;
 }
 
@@ -231,13 +230,7 @@ a { color: inherit; text-decoration: none; }
   aspect-ratio: 3 / 2;    /* 1080×720 — the clip's own ratio, and its poster's.
                              Encoded on the element as well: change both. */
   object-fit: cover;
-  background: #001330;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 .6%, #000 99.4%, transparent),
-                      linear-gradient(180deg, transparent, #000 6%, #000 88%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(90deg, transparent, #000 .6%, #000 99.4%, transparent),
-              linear-gradient(180deg, transparent, #000 6%, #000 88%, transparent);
-  mask-composite: intersect;
+  background: var(--page);
 }
 
 /* The stage is exactly the clip, and a size container, so the overlays can
@@ -248,30 +241,10 @@ a { color: inherit; text-decoration: none; }
   container-type: inline-size;
 }
 
-/* The header's ground is a lighter navy than the page, and its type sits too
-   close to the sides to fade them out. So a band behind it continues the
-   image's own edge colours — sampled down its outer columns: #02255b at the
-   top, #001233 through the middle, #011b49 near the floor — and fades away
-   sideways over ~240px, so the image has no seam at either side. The band is
-   exactly the image's height, placed off the same --stage-w the image uses. */
-.hero {
-  position: relative;
-  --stage-w: min(960px, calc((100vh - 230px) * 1.5), calc(100vw - 40px));
-  --stage-w: min(960px, calc((100svh - 230px) * 1.5), calc(100vw - 40px));
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 8px;                                   /* the hero's own top padding */
-  height: calc(var(--stage-w) * 2 / 3);
-  z-index: -1;
-  background: linear-gradient(180deg, #02255b 0%, #011d51 10%, #001943 25%, #011535 40%, #001233 55%, #011535 75%, #001c4b 85%, #011b49 92%, #000e27 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent calc(50% - var(--stage-w) / 2 - 240px), #000 calc(50% - var(--stage-w) / 2 + 2px), #000 calc(50% + var(--stage-w) / 2 - 2px), transparent calc(50% + var(--stage-w) / 2 + 240px));
-  mask-image: linear-gradient(90deg, transparent calc(50% - var(--stage-w) / 2 - 240px), #000 calc(50% - var(--stage-w) / 2 + 2px), #000 calc(50% + var(--stage-w) / 2 - 2px), transparent calc(50% + var(--stage-w) / 2 + 240px));
-  pointer-events: none;
-}
+/* The clip's edges are faded into the page's own navy in the video file itself
+   (images/src/README.md), so it needs no mask, no band and no halo here —
+   any of those would draw a second edge of its own. */
+.hero { position: relative; }
 
 /* "Play Snake", low on the clip's reflection: below the phone and clear of
    every line of type in the clip. */
@@ -1033,10 +1006,6 @@ a { color: inherit; text-decoration: none; }
   .hero__cta:active { transform: translate(4px, 4px); }
 
   .hero__cta-icon { width: 9px; height: 9px; }
-  .hero__media {
-    -webkit-mask-image: linear-gradient(180deg, #000 88%, transparent);
-    mask-image: linear-gradient(180deg, #000 88%, transparent);
-  }
 
   .actions { padding: 4px 14px 22px; gap: 10px; }
   .actions__inner { gap: 10px; }

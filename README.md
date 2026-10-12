@@ -52,8 +52,9 @@ Live at **https://3210nokc.xyz** (Vercel).
   Snake, BUY and $3310. The poster is its own first frame; visitors with
   `prefers-reduced-motion: reduce` get the poster as a still and the video
   never downloads. The hero tops out at 960px wide and scales to the
-  viewport height; a band in the clip's edge colours carries it out to the
-  sides.
+  viewport height. Its edges are faded into the page navy inside the video
+  file itself (`images/src/header_mask.png`), around the type, so there is
+  no frame to see and no CSS mask to keep in step with it.
 - **Actions** — three buttons: X, the chart, and a button that copies the CA
   and flashes a confirmation. Before launch the chart and copy buttons say so
   instead of opening an empty page.
