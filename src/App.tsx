@@ -126,7 +126,10 @@ export default function App() {
 
   return (
     <main className="nk-page">
-      <h1 className="nk-title">3210</h1>
+      <header className="nk-brand">
+        <img src="/logo.webp" alt="" width={56} height={56} />
+        <h1>3210</h1>
+      </header>
       <div className="nk-phone">
         <img className="nk-photo" src="/phone.webp" alt="" draggable={false} />
         <div

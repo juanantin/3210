@@ -8,18 +8,28 @@
   padding: 24px 16px;
 }
 
-.nk-title {
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.4em;
-  margin-right: -0.4em;
-  opacity: 0.55;
+.nk-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nk-brand img {
+  width: 56px;
+  height: 56px;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.5));
+}
+
+.nk-brand h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
 }
 
 /* The phone photo, sized to fit the viewport height as well as its width. */
 .nk-phone {
   position: relative;
-  width: min(340px, 100%, calc((100vh - 170px) * 480 / 1168));
+  width: min(340px, 100%, calc((100vh - 220px) * 480 / 1168));
   min-width: 220px;
   aspect-ratio: 480 / 1168;
   user-select: none;
