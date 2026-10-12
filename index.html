@@ -34,10 +34,10 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=3" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=3">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=3">
-<link rel="manifest" href="site.webmanifest?v=3">
+<link rel="icon" href="favicon.ico?v=4" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=4">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=4">
+<link rel="manifest" href="site.webmanifest?v=4">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -55,7 +55,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=3">
+<link rel="stylesheet" href="assets/css/styles.css?v=4">
 </head>
 <body>
 
@@ -137,12 +137,12 @@
     <h1 class="sr-only">$3210 — the phone that never dies. Buy $3210, get $NOKc.</h1>
     <video
       class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=3"
+      poster="images/header_poster.webp?v=4"
       width="672" height="448"
       autoplay muted loop playsinline preload="none"
       aria-label="$3210 — the phone that never dies. A blue Nokia-style phone on a glowing blue stage, its screen cycling through Snake and $3210, beside BUY $3210. GET $NOKc., on Base."
-      data-src="images/header.mp4?v=3"
-      data-src-webm="images/header.webm?v=3"></video>
+      data-src="images/header.mp4?v=4"
+      data-src-webm="images/header.webm?v=4"></video>
 
     <script>
       (function () {
@@ -161,6 +161,15 @@
         if (p && p.catch) p.catch(function () {});
       })();
     </script>
+
+    <!-- Sits on the clip's reflection, below the phone, where it covers no
+         type. A plain link, so it works without JavaScript too. -->
+    <a class="hero__cta" href="#play">
+      <svg class="hero__cta-icon" viewBox="0 0 10 10" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M2 1h2v1h2v1h2v1h1v2H8v1H6v1H4v1H2Z"/>
+      </svg>
+      Play Snake
+    </a>
   </div>
 </header>
 
@@ -322,7 +331,7 @@
   <!-- ===================== GAME ===================== -->
   <!-- Classic Snake on the phone. assets/js/snake/phone.js builds it inside
        [data-snake]; without JavaScript the section is just its heading. -->
-  <section class="game" aria-labelledby="game-title">
+  <section class="game" id="play" aria-labelledby="game-title">
     <div class="game__intro">
       <h2 class="game__title" id="game-title">Play Snake</h2>
       <p class="game__lede">The phone that never dies — and neither does Snake. Tap the keys on the phone, or click it and steer with the arrow keys.</p>
@@ -413,8 +422,8 @@
 <!-- ?v= is the cache buster: run `node scripts/stamp.mjs` on every deploy,
      which moves every ?v= here and `version` in config.js together. Skip it
      and a CDN keeps serving the previous config.js and app.js. -->
-<script src="config.js?v=3"></script>
-<script src="assets/js/app.js?v=3"></script>
-<script type="module" src="assets/js/snake/phone.js?v=3"></script>
+<script src="config.js?v=4"></script>
+<script src="assets/js/app.js?v=4"></script>
+<script type="module" src="assets/js/snake/phone.js?v=4"></script>
 </body>
 </html>

@@ -235,6 +235,54 @@ a { color: inherit; text-decoration: none; }
   mask-composite: intersect;
 }
 
+/* "Play Snake", over the clip's reflection: below the phone and clear of
+   every line of type in the clip. The anchor for its position is
+   .hero__inner, so it tracks the clip at any width. */
+.hero__inner { position: relative; }
+
+.hero__cta {
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px 12px;
+  font: 700 17px/1 var(--pixel);
+  letter-spacing: .02em;
+  color: #fff;
+  white-space: nowrap;
+  background: linear-gradient(174deg, #5cb6ff 0%, var(--accent) 52%, #1468d6 100%);
+  border: 2px solid #9fd2ff;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .45),
+              4px 4px 0 #0b2459,
+              0 0 26px rgba(42, 155, 252, .55);
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+
+.hero__cta-icon { width: 14px; height: 14px; flex: none; }
+
+.hero__cta:hover {
+  transform: translate(calc(-50% - 2px), -2px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .45),
+              6px 6px 0 #0b2459,
+              0 0 34px rgba(42, 155, 252, .75);
+}
+
+/* Travels into its own shadow, like the other buttons. */
+.hero__cta:active {
+  transform: translate(calc(-50% + 4px), 4px);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .45), 0 0 0 #0b2459, 0 0 20px rgba(42, 155, 252, .45);
+}
+
+/* The jump to the game glides, unless the reader asked for less motion; and
+   the section stops a little below the top edge rather than flush with it. */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+#play { scroll-margin-top: 18px; }
+
 /* ==========================================================================
    Actions — the three buttons under the hero
    ========================================================================== */
@@ -866,6 +914,23 @@ a { color: inherit; text-decoration: none; }
   /* Edge to edge on a phone, never overscanned: the clip has type within
      3% of both sides. Only the reflection at the bottom is feathered. */
   .hero { padding: 4px 0 0; }
+  /* At phone width the reflection is too short to hold it without covering
+     the phone, so it steps out of the clip and sits just beneath it. */
+  .hero__cta {
+    position: relative;
+    left: auto;
+    bottom: auto;
+    transform: none;
+    display: flex;
+    width: max-content;
+    margin: 2px auto 10px;
+    padding: 10px 16px 9px;
+    font-size: 14px;
+    gap: 8px;
+  }
+  .hero__cta:hover { transform: translate(-2px, -2px); }
+  .hero__cta:active { transform: translate(4px, 4px); }
+  .hero__cta-icon { width: 11px; height: 11px; }
   .hero__media {
     -webkit-mask-image: linear-gradient(180deg, #000 88%, transparent);
     mask-image: linear-gradient(180deg, #000 88%, transparent);
@@ -948,4 +1013,106 @@ a { color: inherit; text-decoration: none; }
   }
   /* …but the loading placeholder still needs to be visible */
   .dots i { opacity: .55; }
+}
+
+/* ==========================================================================
+   Dashboard, compact and unframed
+
+   The six figures and the three facts read as one quiet block under the
+   header rather than as nine boxes: no card, edge or shadow — just the icon
+   block beside its label and figure, three to a row (two on a phone). Last
+   in the file so it outranks the template's card rules at every width.
+   ========================================================================== */
+
+.stats {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 28px;
+}
+
+.stat,
+.stat:hover {
+  flex-direction: row-reverse;      /* icon first on screen, still last in the markup */
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+}
+
+.stat::before,
+.facts::before { content: none; }
+
+.stat__body { width: auto; }
+
+.stat__icon,
+.fact__icon {
+  width: 38px;
+  height: 38px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .45),
+              inset 0 -2px 0 rgba(6, 34, 96, .38),
+              2px 2px 0 #061840;
+}
+
+.stat__icon svg,
+.fact__icon svg { width: 19px; height: 19px; }
+
+.fact__icon--base { box-shadow: inset 0 0 0 2px var(--face-edge); }
+.fact__icon--base svg { width: 22px; height: 22px; }
+
+.stat__label { margin-bottom: 4px; font-size: 11px; }
+
+.stat__value {
+  gap: 6px;
+  font-size: clamp(17px, 1.9vw, 21px);
+  white-space: nowrap;
+  word-break: normal;
+}
+
+.stat__sub,
+.stat__sub--lead { margin-top: 2px; font-size: 13px; }
+.stat__note { margin-top: 3px; font-size: 11px; }
+
+.legend { margin-top: 22px; }
+
+.facts {
+  gap: 20px 28px;
+  margin-top: 34px;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.fact { gap: 14px; }
+.fact__label { font-size: 11px; }
+.fact__value { font-size: 15px; }
+.fact__sub { font-size: 12.5px; }
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .stats { gap: 18px 12px; }
+  .stat,
+  .stat:hover { flex-direction: row-reverse; align-items: center; padding: 0; gap: 10px; }
+  .stat__icon { width: 30px; height: 30px; }
+  .stat__icon svg { width: 15px; height: 15px; }
+  .stat__label { font-size: 9.5px; letter-spacing: .03em; }
+  .stat__value { font-size: clamp(14px, 4.2vw, 17px); }
+  .stat__sub, .stat__sub--lead { font-size: 12px; }
+  .facts { margin-top: 28px; gap: 16px; }
+}
+
+/* With the cards gone nothing hides the cubes behind the figures any more,
+   so they keep to the gutters: masked out across the 1000px content column
+   (plus a little air), and so absent altogether on screens without gutters. */
+.cubes {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(50% - 540px), transparent calc(50% - 500px),
+                                      transparent calc(50% + 500px), #000 calc(50% + 540px));
+  mask-image: linear-gradient(90deg, #000 calc(50% - 540px), transparent calc(50% - 500px),
+                              transparent calc(50% + 500px), #000 calc(50% + 540px));
 }
