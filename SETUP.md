@@ -73,9 +73,8 @@ setting on the platform's panel, and artwork.
 Done. For the record of how each file is made:
 
 - `images/src/banner_master.jpg` is the banner as supplied (1500×500); the
-  hero's `images/banner.webp` and `banner-1000.webp`, and the share card
-  `images/social.jpg`, come from it. When the site has its final domain, make
-  `og:image`, `twitter:image` and an `og:url` absolute in `index.html`.
+  share card `images/social.jpg` comes from it, and `index.html` points
+  `og:image`, `twitter:image` and `og:url` at it on https://3210nokc.xyz.
 - `images/src/token_master.webp` is the coin; every icon is derived from it
   (trimmed, transparent, the Apple one flattened onto the page navy). After
   changing any of them run `node scripts/stamp.mjs`, which moves every `?v=`
@@ -142,7 +141,7 @@ this repo at a token whose addresses are not yet filled in.
   a `"//"` comment key once failed every production deploy for eighteen hours
   while the data behind it updated perfectly. Validate the key names, not just
   that the JSON parses.
-- Set the **`SITE_URL` repository variable** (Settings ▸ Secrets and variables
+- Set the **`SITE_URL` repository variable** to `https://3210nokc.xyz` (Settings ▸ Secrets and variables
   ▸ Actions ▸ Variables) to the deployment's public URL. The probe workflow's
   live-site pass skips itself while it is unset, because there is genuinely
   nothing to probe; once set, it is the only pass that proves what a visitor

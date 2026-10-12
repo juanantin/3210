@@ -32,7 +32,16 @@ scripts/              GitHub Actions indexer, discovery and probes
 worker/               the same indexer as a Cloudflare Worker (optional)
 ```
 
+Live at **https://3210nokc.xyz** (Vercel).
+
 ## What's on the page
+
+- **The first screen is the header and the dashboard, exactly.** They share
+  `.fold`, at least one viewport tall (`100svh` — the height with a phone's
+  toolbars showing), so the game starts just below the fold rather than
+  peeking in. Every visit opens at the top: scroll restoration is off and a
+  `#hash` in the address is dropped on load, and "Play Snake" scrolls to the
+  game without writing `#play` into the address.
 
 - **Hero** — the header clip (`images/header.mp4`, H.264, and
   `images/header.webm`, VP9 — the page picks whichever the browser plays),
@@ -321,6 +330,8 @@ cd worker && npm test
   0.6 MB) and `images/header.webm` the same in VP9 (0.5 MB). The commands are
   in `images/src/README.md`. Its ratio is encoded twice — the `width`/`height`
   on the `<video>` and `.hero__media`'s `aspect-ratio` — change both together.
+- The share card and `og:url` are absolute URLs on `https://3210nokc.xyz` —
+  change them in `index.html` if the domain ever moves.
 - `images/social.jpg` is the 1200×630 share card: the banner whole, its top
   and bottom rows extended and faded into the ground — a 3:1 banner cropped to
   a card's 2:1 would lose its corner marks.

@@ -1173,3 +1173,31 @@ a { color: inherit; text-decoration: none; }
   mask-image: linear-gradient(90deg, #000 calc(50% - 540px), transparent calc(50% - 500px),
                               transparent calc(50% + 500px), #000 calc(50% + 540px));
 }
+
+/* ==========================================================================
+   The first screen — header and dashboard, and nothing else
+
+   .fold is at least one viewport tall, so whatever follows it (the game)
+   starts below the fold. svh is the viewport with a phone's toolbars
+   showing, so the game cannot peek in under them; vh where svh is not
+   supported. The dashboard takes the room left under the header and centres
+   itself in it, so the spare height is shared rather than pooled at the end.
+   ========================================================================== */
+
+.fold {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.fold__dash {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 24px;
+}
+
+.fold + .wrap .game { margin-top: 0; }

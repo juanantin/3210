@@ -6,23 +6,26 @@
 <title>$3210 — The phone that never dies</title>
 <meta name="description" content="$3210 on Base — the phone that never dies. Buy $3210, get $NOKc. Live dashboard, and classic Snake playable right on the page.">
 
-<!-- The social card. A scraper fetches these from its own servers; images/
+<!-- The social card, at absolute URLs on the site's domain: a scraper
+     fetches these from its own servers, with no page to resolve a relative
+     path against. images/
      social.jpg is the banner, whole, on 1200×630 — a 3:1 image loses its
      edges to a card's 2:1 crop, so its top and bottom are extended into the
-     ground instead. Once the site has its final domain, make og:url and both
-     image URLs ABSOLUTE — some scrapers will not resolve a relative path. -->
+     ground instead. -->
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://3210nokc.xyz/">
+<link rel="canonical" href="https://3210nokc.xyz/">
 <meta property="og:site_name" content="$3210">
 <meta property="og:title" content="$3210 — The phone that never dies">
 <meta property="og:description" content="Buy $3210. Get $NOKc. On Base.">
-<meta property="og:image" content="images/social.jpg">
+<meta property="og:image" content="https://3210nokc.xyz/images/social.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="$3210 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3210. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@3210token">
-<meta name="twitter:image" content="images/social.jpg">
+<meta name="twitter:image" content="https://3210nokc.xyz/images/social.jpg">
 <meta name="twitter:image:alt" content="$3210 — the phone that never dies. A blue Nokia-style phone playing Snake, beside BUY $3210. GET $NOKc., on Base, launched on Stonks.Exchange with rewards by Stockify.">
 <meta name="theme-color" content="#000e27">
 
@@ -34,10 +37,10 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=6" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=6">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=6">
-<link rel="manifest" href="site.webmanifest?v=6">
+<link rel="icon" href="favicon.ico?v=7" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=7">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=7">
+<link rel="manifest" href="site.webmanifest?v=7">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -55,7 +58,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=6">
+<link rel="stylesheet" href="assets/css/styles.css?v=7">
 </head>
 <body>
 
@@ -120,6 +123,15 @@
   })();
 </script>
 
+<main>
+
+<!-- ===================== FIRST SCREEN ===================== -->
+<!-- The header and the dashboard are the first screen, and exactly the first
+     screen: .fold is at least one viewport tall (100svh, the height with the
+     phone's toolbars showing), so the game starts below the fold instead of
+     peeking in under the figures. -->
+<div class="fold">
+
 <!-- ===================== HERO ===================== -->
 <!-- The header clip carries the wordmark and the line, so the heading behind
      it is screen-reader only.
@@ -140,12 +152,12 @@
     <div class="hero__stage">
     <video
       class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=6"
+      poster="images/header_poster.webp?v=7"
       width="672" height="448"
       autoplay muted loop playsinline preload="none"
       aria-label="$3210 — the phone that never dies. A blue Nokia-style phone on a glowing blue stage, its screen cycling through Snake and $3210, beside BUY $3210. GET $NOKc., on Base."
-      data-src="images/header.mp4?v=6"
-      data-src-webm="images/header.webm?v=6"></video>
+      data-src="images/header.mp4?v=7"
+      data-src-webm="images/header.webm?v=7"></video>
 
     <script>
       (function () {
@@ -224,7 +236,7 @@
 </header>
 
 
-<main class="wrap">
+<div class="wrap fold__dash">
 
   <!-- ===================== DASHBOARD ===================== -->
   <section class="stats" id="stats" aria-label="Live token stats">
@@ -333,6 +345,11 @@
     <span class="legend__dot" aria-hidden="true"></span>
     <span id="legend-text">Reading the chain…</span>
   </p>
+</div>
+
+</div><!-- /.fold -->
+
+<div class="wrap">
 
   <!-- ===================== GAME ===================== -->
   <!-- Classic Snake on the phone. assets/js/snake/phone.js builds it inside
@@ -418,6 +435,7 @@
 
   </section>
 
+</div>
 </main>
 
 <footer class="foot">
@@ -428,8 +446,31 @@
 <!-- ?v= is the cache buster: run `node scripts/stamp.mjs` on every deploy,
      which moves every ?v= here and `version` in config.js together. Skip it
      and a CDN keeps serving the previous config.js and app.js. -->
-<script src="config.js?v=6"></script>
-<script src="assets/js/app.js?v=6"></script>
-<script type="module" src="assets/js/snake/phone.js?v=6"></script>
+<script>
+  /* Every visit opens on the first screen. The browser would otherwise put
+     a reload or a back-navigation wherever the reader last was, or on #play
+     if that is in the address. */
+  (function () {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    window.scrollTo(0, 0);
+    // A page restored from the back/forward cache keeps its scroll position.
+    addEventListener('pageshow', function (e) { if (e.persisted) window.scrollTo(0, 0); });
+
+    /* "Play Snake" glides to the game without writing #play into the
+       address, so a reload still starts at the top. Without JavaScript it is
+       a plain link and the jump still works. */
+    var cta = document.querySelector('.hero__cta');
+    var game = document.getElementById('play');
+    if (cta && game) cta.addEventListener('click', function (e) {
+      e.preventDefault();
+      var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      game.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
+    });
+  })();
+</script>
+<script src="config.js?v=7"></script>
+<script src="assets/js/app.js?v=7"></script>
+<script type="module" src="assets/js/snake/phone.js?v=7"></script>
 </body>
 </html>
