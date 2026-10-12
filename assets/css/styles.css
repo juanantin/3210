@@ -1,0 +1,936 @@
+/* ==========================================================================
+   $3210 — styles
+
+   Built on the $BLUE site's template: square corners, cards lifted by a
+   stepped block shadow, and floating cubes in the gutters — pixel art, which
+   suits a token whose whole idea is an 84×48 LCD. The accent is the token's
+   own Nokia blue, sampled from the coin (#002d82 deep, #0b3fb3 bright), and
+   the second colour is its LCD green (#7bab70).
+   ========================================================================== */
+
+:root {
+  /* Surfaces & ink — a near-white with a breath of the coin's blue in it */
+  --page:        #f6f8fd;
+  --surface:     #ffffff;
+  --ink:         #0d1220;
+  --ink-2:       #3b4557;
+  --muted:       #78839a;
+  --line:        #e3e8f2;
+  --line-strong: #ccd6e6;
+
+  /* The coin's blue, and the phone screen's green */
+  --accent:      #0b3fb3;
+  --accent-deep: #002d82;
+  --accent-soft: #e2e9f8;
+  --lcd:         #7bab70;
+  --lcd-soft:    #dfeed8;
+
+  --base-blue:   #0052ff;
+
+  /* Shape. NO radius anywhere: right angles are the whole of the pixel-art
+     idea — a rounded corner is an anti-aliased curve, which is the one thing
+     an 84×48 LCD never draws.
+
+     Notching the corners was the first attempt and it was worse: at card size
+     it read as a cinema ticket, and on a 52px icon the four cuts met in the
+     middle and turned the tile into a plus sign.
+
+     Depth instead comes from --stack, a shadow drawn as two offset blocks
+     with no blur — a pixel staircase — over
+     one soft shadow that does the actual lifting. */
+  --face:        linear-gradient(176deg, #ffffff 0%, #fdfeff 46%, #f4f8ff 100%);
+  /* The page is a near-white, so a card cannot separate itself by being
+     lighter — there is nowhere lighter to go. It separates by EDGE
+     and by DEPTH instead: a definite 2px outline, then two solid blocks
+     stepping away from it. Both are pitched to stay quiet on white; a darker
+     stack turns the dashboard into a comic panel. */
+  --face-edge:   #ccdaf1;
+  --stack:       4px 4px 0 #dfe8fa, 8px 8px 0 #edf2fd, 0 16px 26px rgba(13, 18, 32, .08);
+  --stack-lift:  5px 5px 0 #c9d6f3, 10px 10px 0 #e2e9f8, 0 22px 36px rgba(0, 45, 130, .18);
+
+  --r-btn:       0px;
+  --r-card:      0px;
+
+  --shadow-card: 0 1px 2px rgba(20,17,15,.03), 0 6px 18px rgba(30,60,120,.06);
+
+  --wrap:        1000px;
+
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  /* The containing block for .cubes, which spans the document rather than
+     the viewport. */
+  position: relative;
+  font-family: var(--font);
+  color: var(--ink);
+  background-color: var(--page);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+
+  /* The faint isometric cubes behind everything. Drawn rather than shipped as
+     an image so it stays crisp at any zoom and costs no request. */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='104' viewBox='0 0 120 104'%3E%3Cg fill='none' stroke='%230b3fb3' stroke-opacity='.06' stroke-width='1'%3E%3Cpath d='M30 0 60 17v34L30 68 0 51V17Z'/%3E%3Cpath d='M0 17l30 17 30-17M30 34v34'/%3E%3Cpath d='M90 52l30 17v34l-30 17-30-17V69Z'/%3E%3Cpath d='M60 69l30 17 30-17M90 86v34'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: center top;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+:where(a, button):focus-visible {
+  outline: 2.5px solid var(--accent-deep);
+  outline-offset: 3px;
+  border-radius: var(--r-btn);
+}
+
+/* Present to screen readers, absent on screen. */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ==========================================================================
+   Falling cubes — the artwork's own confetti, behind everything
+
+   The page already carries a static isometric tile; these are the same
+   shapes let loose, in the coin's blue and the screen's green. Decorative in the strict sense: aria-hidden, pointer-events: none,
+   and nothing on the page depends on them.
+
+   ABSOLUTE, not fixed. Fixed was the first version and it was wrong: the
+   cubes hung in the viewport like dust on the lens, going nowhere while the
+   page moved under them. Anchored to the document they belong to the page —
+   they scroll with it, and each one then lags by its own --depth, so the
+   field has some thickness instead of being one flat sheet.
+
+   z-index: -1 puts the layer above the body's own background and behind all
+   in-flow content, so the opaque cards hide the cubes and they read in the
+   gutters rather than under the figures.
+
+   Two transforms, composed by nesting rather than fighting over one property:
+   the <i> carries the scroll parallax, its ::before carries the drift. A
+   single element cannot do both, because an animation owns `transform`
+   outright for as long as it runs.
+   ========================================================================== */
+
+:root {
+  --cube-blue:  url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28'><path d='M12 1 23 7.5 12 14 1 7.5Z' fill='%235b80d6'/><path d='M1 7.5 12 14v13L1 20.5Z' fill='%230b3fb3'/><path d='M23 7.5 12 14v13l11-6.5Z' fill='%23002d82'/></svg>");
+  --cube-green: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 28'><path d='M12 1 23 7.5 12 14 1 7.5Z' fill='%23b5d6a6'/><path d='M1 7.5 12 14v13L1 20.5Z' fill='%237bab70'/><path d='M23 7.5 12 14v13l11-6.5Z' fill='%234f7f47'/></svg>");
+  /* Set by the scroll handler in index.html; 0 until then, and forever if
+     that script never runs, which just means no parallax. */
+  --scroll: 0px;
+}
+
+.cubes {
+  position: absolute;
+  inset: 0;              /* the body's full height, however tall the page is */
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cubes i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  display: block;
+  width: var(--s);
+  height: calc(var(--s) * 1.1667);   /* the cube SVG's own 24:28 */
+  /* The parallax. A cube shifted DOWN by a fraction of the scroll position
+     appears to scroll slower than the text beside it — near cubes keep pace,
+     far ones drag. */
+  transform: translate3d(0, calc(var(--scroll) * var(--depth)), 0);
+}
+
+.cubes i::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: center / contain no-repeat var(--cube-blue);
+  animation: cube-drift var(--d) linear var(--delay) infinite;
+}
+
+.cubes i.is-green::before { background-image: var(--cube-green); }
+
+/* Falls a short way and fades out at both ends, so the loop has no seam: a
+   cube that simply jumped back to its start would flicker once per cycle,
+   and at these durations that is the only thing the eye would catch. */
+@keyframes cube-drift {
+  0%   { transform: translate3d(0, -70px, 0) rotate(0deg); opacity: 0; }
+  14%  { opacity: var(--o); }
+  86%  { opacity: var(--o); }
+  100% { transform: translate3d(var(--drift), 210px, 0) rotate(var(--spin)); opacity: 0; }
+}
+
+/* Decoration is the first thing to go when someone asks for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .cubes { display: none; }
+}
+
+/* Thinner on a phone: the same count in a third of the width reads as weather
+   rather than as a few cubes drifting past. */
+@media (max-width: 620px) {
+  .cubes i:nth-child(3n) { display: none; }
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  padding: 8px 20px 0;
+  overflow: hidden;   /* contains the mobile overscan below */
+}
+
+.hero__inner {
+  max-width: var(--wrap);
+  margin: 0 auto;
+}
+
+/* The coin, the ticker and one line. Centred, because the actions under it
+   are centred, and the coin carries the colour so the type can stay ink. */
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 28px;
+}
+
+.hero__token {
+  width: clamp(180px, 34vw, 280px);
+  height: auto;
+  filter: drop-shadow(0 18px 30px rgba(0, 45, 130, .22));
+}
+
+.hero__title {
+  margin: 14px 0 0;
+  font-size: clamp(54px, 11vw, 96px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.035em;
+  color: var(--accent-deep);
+}
+
+.hero__tag {
+  margin: 10px 0 0;
+  font-size: clamp(17px, 2.4vw, 21px);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+/* ==========================================================================
+   Actions — the three buttons under the hero
+   ========================================================================== */
+
+.actions { padding: 20px 20px 34px; }
+
+.actions__inner {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* Square, because there is no label to set the width any more: the padding
+   that framed "X (Twitter)" would leave a lone 19px glyph adrift in a lozenge
+   three times its width. The .sr-only span inside contributes no box.
+
+   Cut and lit like the cards, and sitting on a hard 4px block of its own —
+   which is what makes the press below feel like a real key travelling into
+   its own shadow rather than a rectangle changing colour. */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  width: 52px;
+  padding: 0;
+  border: 2px solid var(--face-edge);
+  background: var(--face);
+  box-shadow: 4px 4px 0 #e9effc, 0 8px 14px rgba(13, 18, 32, .07);
+  font: inherit;
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .14s ease, filter .14s ease;
+}
+
+/* The lit top edge, as on the cards. */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: #fff;
+}
+
+.btn > * { position: relative; z-index: 1; }
+
+.btn:hover {
+  transform: translate(-2px, -2px);
+  border-color: #c2d5f6;
+  box-shadow: 6px 6px 0 var(--accent-soft), 0 14px 20px rgba(11, 83, 232, .18);
+}
+.btn:hover .btn__icon { color: var(--accent-deep); }
+
+/* Travels INTO its own shadow: the button moves exactly as far as the block
+   beneath it shrinks, so the two read as one object being pressed rather than
+   as a rectangle changing colour. */
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 #e9effc, 0 2px 4px rgba(13, 18, 32, .12);
+}
+
+.btn__icon { width: 19px; height: 19px; flex: none; color: var(--ink); }
+
+.btn__icon--stroke {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Copied toast */
+.ca-wrap { position: relative; }
+
+.toast {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: var(--r-btn);
+  background: var(--ink);
+  color: #fff;
+  font-size: 13.5px;
+  white-space: nowrap;
+  box-shadow: 0 8px 22px rgba(13,18,32,.24);
+  opacity: 0;
+  transform: translate(-50%, -6px) scale(.96);
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+  z-index: 4;
+}
+
+.toast.is-on { opacity: 1; transform: translate(-50%, 0) scale(1); }
+
+.toast__check { width: 15px; height: 15px; color: #7ddb6a; flex: none; }
+.toast.is-error .toast__check { color: #ff8a7a; }
+
+/* ==========================================================================
+   Dashboard cards
+   ========================================================================== */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+/* Label and figure left, icon right — the tile is the card's only colour. The
+   card sits on its own staircase of shadow blocks and steps further out of
+   the page on hover, moving up AND left so it travels along the diagonal the
+   stack is offset on rather than sliding across it. */
+.stat {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 26px;
+  border: 2px solid var(--face-edge);
+  background: var(--face);
+  box-shadow: var(--stack);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+/* The lit top edge. Every voxel in the artwork has one, and it is the whole
+   difference between a flat rectangle and a moulded surface. */
+.stat::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: #fff;
+}
+
+.stat:hover {
+  transform: translate(-2px, -3px);
+  border-color: #c2d5f6;
+  box-shadow: var(--stack-lift);
+}
+
+.stat__body { min-width: 0; }
+
+.stat__label {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.stat__value {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  font-size: clamp(25px, 3.2vw, 32px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.15;
+  color: var(--ink);
+  word-break: break-word;
+  /* Same-width digits, so a figure that ticks up does not jostle the label
+     beside it — and so the six cards line up as a set rather than as six
+     independent numbers. */
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__unit {
+  font-size: .62em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--ink-2);
+}
+
+/* No source for this metric yet — don't dress a dash up as a figure */
+.stat__value .is-empty { color: var(--muted); font-weight: 500; }
+
+.stat__sub {
+  margin: 6px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+
+.stat__sub b { font-weight: 500; }
+
+/* On the payout card the dollar figure is the one a reader can size: a bare
+   reward-token amount means nothing without knowing what a unit is worth — so
+   it runs nearly as large as the token amount above it. */
+.stat__sub--lead {
+  margin-top: 4px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -.01em;
+}
+
+/* Where the fee actually goes. Static text, not a figure. */
+.stat__note {
+  margin: 7px 0 0;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: .01em;
+}
+
+/* Values are numeric strings that swap in — keep them from reflowing */
+.stat__value, .stat__sub b { font-variant-numeric: tabular-nums; }
+
+/* One icon spec for the whole set: a tan disc with a drawn glyph inside */
+/* Not discs any more: square blue blocks, lit the way the voxels are — a
+   bright top face, a deeper bottom, a hard block of shadow beneath. The icon
+   inside goes white, which is what turns a pale badge into the card's one
+   piece of colour. */
+.stat__icon,
+.fact__icon {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(174deg, #4f88ff 0%, var(--accent) 52%, #0a45c8 100%);
+  /* A voxel, read straight off the artwork: lit top face, shadowed bottom,
+     and a hard block of its own colour underneath so it stands off the card
+     rather than lying on it. */
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .5),
+              inset 0 -2px 0 rgba(6, 34, 96, .38),
+              3px 3px 0 #dbe6fb;
+}
+
+.stat__icon svg,
+.fact__icon svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Base keeps its own blue, being a network mark rather than one of the set —
+   so its block stays pale and its stroke stays blue. */
+.fact__icon--base {
+  background: linear-gradient(174deg, #ffffff 0%, var(--accent-soft) 100%);
+  box-shadow: inset 0 0 0 2px #cfe0ff;
+}
+.fact__icon--base svg { stroke: var(--base-blue); }
+
+/* Blinking "…" placeholder, shown until the first data load resolves */
+.dots {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: .18em;
+  padding-bottom: .12em;
+}
+
+.dots i {
+  width: .2em;
+  height: .2em;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .25;
+  animation: dot-blink 1.25s infinite ease-in-out;
+}
+
+.dots i:nth-child(2) { animation-delay: .18s; }
+.dots i:nth-child(3) { animation-delay: .36s; }
+
+@keyframes dot-blink {
+  0%, 65%, 100% { opacity: .22; }
+  32%           { opacity: 1; }
+}
+
+/* Live-data legend. Discreet by design: it should be findable when someone
+   wonders how current a figure is, and invisible the rest of the time. */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  font-size: 12.5px;
+  letter-spacing: .01em;
+  color: var(--muted);
+}
+
+.legend__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+
+/* Reading the chain right now */
+.legend.is-live .legend__dot {
+  background: #46a24b;
+  box-shadow: 0 0 0 0 rgba(70,162,75,.45);
+  animation: legend-pulse 2.4s infinite ease-out;
+}
+
+/* Showing what was last read, because something did not answer */
+.legend.is-stale .legend__dot { background: var(--accent); }
+
+@keyframes legend-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(70,162,75,.45); }
+  70%  { box-shadow: 0 0 0 6px rgba(70,162,75,0); }
+  100% { box-shadow: 0 0 0 0 rgba(70,162,75,0); }
+}
+
+/* ==========================================================================
+   Game — Snake on the phone, under the dashboard
+
+   One card in the house style: the words on the left, the phone on the
+   right, stacking on a phone screen. The phone is a photo with the game
+   drawn over its own LCD (assets/js/snake/phone.js); its hit areas are
+   percentages of the photo, so it can be any width and the keys stay put.
+   ========================================================================== */
+
+.game {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 250px);
+  align-items: center;
+  gap: 36px;
+  margin-top: 30px;
+  padding: 30px 34px;
+  border: 2px solid var(--face-edge);
+  background: var(--face);
+  box-shadow: var(--stack);
+}
+
+/* The LCD's green, as the same 2px rule the other cards wear in blue. */
+.game::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: var(--lcd);
+}
+
+.game__title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+.game__lede {
+  margin: 10px 0 0;
+  max-width: 34ch;
+  font-size: 16px;
+  color: var(--ink-2);
+}
+
+.game__keys {
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 9px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.game__keys li { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.game__keys span { margin-left: 6px; }
+
+.game__keys kbd {
+  min-width: 26px;
+  padding: 3px 7px;
+  font: 600 12px/1.2 var(--font);
+  text-align: center;
+  color: var(--accent-deep);
+  background: var(--accent-soft);
+  border: 2px solid var(--face-edge);
+}
+
+.game__sound {
+  margin-top: 22px;
+  min-height: 40px;
+  padding: 0 16px;
+  font: 600 13px var(--font);
+  color: var(--accent-deep);
+  background: var(--surface);
+  border: 2px solid var(--face-edge);
+  box-shadow: 3px 3px 0 var(--face-edge);
+  cursor: pointer;
+}
+
+.game__sound:hover { border-color: var(--accent); }
+
+.game__phone { justify-self: center; width: 100%; max-width: 250px; }
+
+/* ---- the phone itself ---- */
+
+.phone {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 480 / 1168;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 22px 30px rgba(0, 45, 130, .28));
+  outline: none;
+}
+
+/* Focus is what lets the arrow keys reach the game, so it has to be seen —
+   but as a glow on the screen rather than a box around a phone-shaped photo. */
+.phone:focus-visible .phone__lcd {
+  box-shadow: 0 0 0 3px var(--lcd), 0 0 18px 4px rgba(123, 171, 112, .7);
+  border-radius: 4px;
+}
+
+.phone__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Game pixels drawn over the photo's own LCD glass. */
+.phone__lcd {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.phone__lcd canvas { width: 92%; aspect-ratio: 84 / 48; }
+
+.phone__key {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.phone__key.is-held,
+.phone__key:active {
+  background: radial-gradient(closest-side, rgba(0, 0, 0, .28), rgba(0, 0, 0, .12) 70%, transparent);
+}
+
+@media (max-width: 760px) {
+  .game { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 24px 20px 28px; text-align: center; }
+  .game__lede { margin-left: auto; margin-right: auto; }
+  .game__keys { justify-items: center; }
+  .game__phone { max-width: 240px; }
+}
+
+/* ==========================================================================
+   Token facts — one card, three fixed properties
+   ========================================================================== */
+
+.facts {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 26px;
+  padding: 22px 26px;
+  border: 2px solid var(--face-edge);
+  background: var(--face);
+  box-shadow: var(--stack);
+}
+
+.facts::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: #fff;
+}
+
+.fact {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Base keeps its own blue — it is a network mark, not part of the set */
+.fact__icon--base { background: transparent; }
+.fact__icon--base svg { stroke: var(--base-blue); stroke-width: 1.8; width: 30px; height: 30px; }
+
+.fact__body { min-width: 0; }
+
+.fact__label {
+  margin: 0 0 5px;
+  font-size: 11.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.fact__value {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+.fact__accent { color: var(--accent); }
+
+.fact__sub {
+  margin: 3px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   Ecosystem
+   ========================================================================== */
+
+.eco {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 20px;
+  margin: 44px auto 0;
+  max-width: 660px;
+  padding: 22px 24px 26px;
+  border: 2px solid var(--face-edge);
+  background: var(--face);
+  box-shadow: var(--stack);
+}
+
+.eco__half {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 8px;
+  text-align: center;
+  transition: transform .18s ease;
+}
+
+.eco__half:hover { transform: translateY(-2px); }
+
+.eco__kicker {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.3;
+}
+
+/* Both lockups have the resolution to run large — 550×112 and 800×261 — so
+   they are sized by height and left to keep their own ratios. The
+   Stonks.Exchange bar is much the wider of the two, which makes it read
+   smaller at a matched height, so it gets a little more. */
+.eco__logo { height: 44px; width: auto; }
+.eco__logo--stonks { height: 52px; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.foot {
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+  padding: 34px 20px 40px;
+}
+
+.foot p { margin: 0; }
+
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 900px) {
+  .stats { gap: 14px; }
+  .stat { padding: 18px 20px; gap: 14px; }
+  .stat__icon, .fact__icon { width: 46px; height: 46px; }
+  .stat__icon svg, .fact__icon svg { width: 23px; height: 23px; }
+  .facts { gap: 20px; padding: 20px; }
+}
+
+@media (max-width: 760px) {
+  .btn { min-height: 46px; padding: 0 18px; font-size: 14px; gap: 8px; }
+  .btn__icon { width: 17px; height: 17px; }
+
+  /* One fact per row, so the value never wraps under its own icon */
+  .facts { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+}
+
+@media (max-width: 620px) {
+  .hero__inner { padding-top: 18px; }
+
+  .actions { padding: 4px 14px 22px; gap: 10px; }
+  .actions__inner { gap: 10px; }
+  .btn { min-height: 46px; width: 46px; }
+
+  .wrap { padding: 0 14px; }
+
+  /* Two cards per row. At this width the label, the figure and a 42px disc
+     cannot share a line, so the card turns: the disc goes above the text and
+     the figure gets the card's full width instead of what the disc leaves. */
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+  .stat {
+    flex-direction: column-reverse;   /* markup keeps the disc last, for reading order */
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 14px 13px;
+    gap: 10px;
+  }
+
+  .stat__body { width: 100%; }
+
+  .stat__label { font-size: 10.5px; letter-spacing: .05em; margin-bottom: 5px; }
+
+  /* A figure is one word. The global break-word would hyphenate a market cap
+     across two lines mid-thousands ("$4,567,890." / "12"), so it is turned off
+     here and the type scales with the card instead. */
+  .stat__value {
+    font-size: clamp(15px, 4.6vw, 19px);
+    gap: 5px;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+    word-break: normal;
+  }
+  .stat__unit { font-size: .66em; }
+  .stat__sub { font-size: 13px; }
+  .stat__sub--lead { font-size: 16px; margin-top: 3px; }
+  .stat__note { font-size: 11px; margin-top: 5px; }
+
+  .stat__icon { width: 34px; height: 34px; }
+  .stat__icon svg { width: 17px; height: 17px; }
+  .fact__icon { width: 42px; height: 42px; }
+  .fact__icon svg { width: 21px; height: 21px; }
+
+  /* Stack the two ecosystem blocks */
+  .eco { grid-template-columns: minmax(0, 1fr); gap: 18px; margin-top: 32px; padding: 18px 16px 20px; }
+  .eco__kicker { font-size: 12.5px; }
+  .eco__logo { height: 34px; }
+  .eco__logo--stonks { height: 30px; }
+
+  .foot { padding: 26px 16px 32px; }
+}
+
+@media (max-width: 420px) {
+  .actions__inner { gap: 8px; }
+  .btn { min-height: 40px; padding: 0 11px; font-size: 12.5px; gap: 6px; }
+  .btn__icon { width: 15px; height: 15px; }
+
+  /* Two-up at 320px leaves ~140px a card. The turned card spends the disc's
+     space vertically rather than beside the figure, so it can stay — only the
+     type and the padding give. */
+  .stats { gap: 8px; }
+  .stat { padding: 12px 11px; gap: 8px; }
+  .stat__icon { width: 30px; height: 30px; }
+  .stat__icon svg { width: 15px; height: 15px; }
+  .stat__label { font-size: 10px; letter-spacing: .04em; }
+  .stat__sub, .stat__sub--lead { white-space: nowrap; }
+  .legend { font-size: 11.5px; gap: 6px; }
+  .stat__sub--lead { font-size: 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    transition-duration: .001ms !important;
+  }
+  /* …but the loading placeholder still needs to be visible */
+  .dots i { opacity: .55; }
+}

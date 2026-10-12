@@ -1,0 +1,112 @@
+name: Probe token flows
+
+# Diagnostic, run by hand. The sandbox these changes are written in has no
+# route to Base, DexScreener or GeckoTerminal, so the one question that
+# matters — which token the rewards are actually paid in, and whether
+# anything will price it — can only be asked from a runner that has network.
+#
+# Actions ▸ Probe token flows ▸ Run workflow, then read the job log.
+
+on:
+  # Also on push, because the token that drives this session cannot dispatch
+  # a workflow by hand — touching either file below is how it gets run.
+  push:
+    paths:
+      - scripts/probe.mjs
+      - scripts/page-probe.mjs
+      - scripts/panel-probe.mjs
+      - .github/workflows/probe.yml
+      # The page probe exists to test these two, so a change to either is
+      # exactly when it should run.
+      - assets/js/app.js
+      - config.js
+  workflow_dispatch:
+    inputs:
+      rpc_url:
+        description: Base RPC endpoint
+        required: false
+        default: https://mainnet.base.org
+      start_block:
+        description: First block to scan (blank = config.js launchBlock)
+        required: false
+        default: ''
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      # Everything below asks about the token, so it waits for config.js to
+      # name one. Without this every push before launch would be a red run.
+      - name: Is there a token yet?
+        id: cfg
+        run: |
+          if grep -Eq "contractAddress:\s*'0x[0-9a-fA-F]{40}'" config.js; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "config.js has no contractAddress yet — skipping the probes"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+      # The other half of the question: not what the chain holds, but what the
+      # page does with it. Runs the committed site in a real browser, against
+      # the real network, and prints the tiles.
+      - name: Probe the page
+        if: steps.cfg.outputs.ready == 'true'
+        run: |
+          npm i --no-save playwright@1.49.1
+          npx playwright install --with-deps chromium
+          node scripts/page-probe.mjs
+
+      # The same page, but starting from a browser that already banked zeros —
+      # the state a returning visitor is in, and the one a fresh run cannot
+      # reach. Fails the build if a seeded zero is still on screen at the end.
+      - name: Probe the page as a returning visitor
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          SEED_ZEROS: '1'
+        run: node scripts/page-probe.mjs
+
+      # A phone, cold. The report that prompted this was "showing — on
+      # mobile", and a desktop run cannot see it: the difference is an empty
+      # cache and a tab nobody keeps in front for a minute.
+      - name: Probe the page as a phone
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          MOBILE: '1'
+        run: node scripts/page-probe.mjs
+
+      # The DEPLOYED site, which is the only one a visitor sees. Everything
+      # above runs against this working tree and so proves the code is right,
+      # never that it is live — the repo is not served from GitHub Pages; it
+      # deploys to Vercel, at the URL below — which is the repo's own homepage
+      # field, set by Vercel when it linked the project. The SITE_URL
+      # repository variable (Settings ▸ Secrets and variables ▸ Actions ▸
+      # Variables) overrides it, for a preview deployment or a custom domain.
+      - name: Probe the live site
+        if: steps.cfg.outputs.ready == 'true' && vars.SITE_URL != ''
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: node scripts/page-probe.mjs
+
+      # Reading these logs through the API returns only the TAIL of the job,
+      # and the browser steps are thousands of lines of CORS and retry noise —
+      # so anything printed first is unreadable by the time anyone asks for
+      # it. The two steps whose output is meant to be quoted go last.
+      - name: Probe the chain
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          RPC_URL: ${{ inputs.rpc_url }}
+          START_BLOCK: ${{ inputs.start_block }}
+        run: node scripts/probe.mjs
+
+      # Last of all: what the platform itself publishes, printed beside what
+      # this site publishes. A chain scan cannot check its own assumptions —
+      # which flow is "fees", and what share of the outflow reaches holders —
+      # and those are the assumptions that turn a correct measurement into a
+      # wrong tile.
+      - name: Read the platform's own panels
+        if: always() && steps.cfg.outputs.ready == 'true'
+        run: node scripts/panel-probe.mjs

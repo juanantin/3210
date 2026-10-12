@@ -1,0 +1,22 @@
+{
+  "__doc": [
+    "Fees collected, rewards distributed and the holder count, published by",
+    "scripts/index-rewards.mjs on a schedule so that no visitor has to compute",
+    "them. Nulls render as em dashes on the page.",
+    "",
+    "Nulls here are the launch state, not a fault: the indexer has not run yet,",
+    "and refuses to until worker/src/config.js names the token and its index."
+  ],
+  "totalDistributed": null,
+  "totalDistributedUsd": null,
+  "totalFeesCollected": null,
+  "totalFeesTokens": null,
+  "holders": null,
+  "marketCap": null,
+  "liquidity": null,
+  "volume24h": null,
+  "updatedAt": null,
+  "meta": {
+    "synced": false
+  }
+}
