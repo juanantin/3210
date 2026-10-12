@@ -133,9 +133,10 @@ this repo at a token whose addresses are not yet filled in.
 ## 4. Repo settings
 
 - **Deployment is Vercel, not GitHub Pages.** Import the repo as a Vercel
-  project: no framework preset, no build command, output is the repo root —
-  it is static HTML with no build step. `vercel.json` carries the cache
-  headers and **only** headers: that file rejects unknown top-level keys, and
+  project with any preset: `vercel.json` sets the build (`npm run build`,
+  which only copies the served files) and the output (`dist/`), plus the
+  cache headers. Keep it to keys Vercel knows: that file rejects unknown
+  top-level keys, and
   a `"//"` comment key once failed every production deploy for eighteen hours
   while the data behind it updated perfectly. Validate the key names, not just
   that the JSON parses.

@@ -2,7 +2,8 @@
 
 The site for the $3210 token: the coin and its ticker, a live dashboard, and
 classic Snake playable on a Nokia-style phone right on the page. Static
-HTML/CSS/JS — no build step, no dependencies, no framework.
+HTML/CSS/JS — no dependencies, no framework, and no build beyond copying
+the served files into `dist/`.
 
 Built on the template of [`juanantin/blue`](https://github.com/juanantin/blue)
 (which was itself copied from `juanantin/box`): the dashboard, its data
@@ -247,16 +248,23 @@ behaviour, not a bug: nothing invented is shown as real.
 
 ## Deploying
 
-**This site deploys to Vercel** — no framework preset, no build command, the
-repo root as output. Any static host would work, but two details are not
-optional wherever it lands, and both are in `vercel.json`:
+**This site deploys to Vercel.** `vercel.json` sets the build to
+`npm run build` and the output to `dist/`; that build
+([`scripts/build.mjs`](scripts/build.mjs)) only copies the served files —
+`index.html`, `config.js`, the icons, `assets/`, `images/` minus its
+originals, and `data/`. It exists because the Vercel project was created
+while this repo was a Vite app, and a project keeps running `npm run build`
+into `dist/`: with no `package.json` that failed on every push and the old
+app stayed live. Now the deploy is right under either preset. Any static host
+would work, but two details are not optional wherever it lands, and both are
+in `vercel.json`:
 
 - **`index.html` must send `Cache-Control: must-revalidate`.** It carries the
   `?v=` cache-busters below, so a cached shell pins a visitor to an old build:
   the busting scheme only works if the document naming the versions is itself
   fresh. `data/rewards.json` is the same — it is the file the dashboard reads.
-- **`vercel.json` takes headers and nothing else.** It rejects unknown
-  top-level keys, and a `"//"` comment key once failed every production deploy
+- **`vercel.json` takes only keys Vercel knows** — today `buildCommand`,
+  `outputDirectory` and `headers`. It rejects unknown top-level keys, and a `"//"` comment key once failed every production deploy
   for eighteen hours while the data behind it updated perfectly. Validate the
   key names, not just that the JSON parses.
 
