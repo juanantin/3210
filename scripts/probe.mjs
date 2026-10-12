@@ -255,6 +255,13 @@ async function main() {
   console.log(`rpc          ${RPC_URL}`);
   console.log(`token        ${TOKEN}`);
   console.log(`rewardsIndex ${INDEX}`);
+  /* The flows this probe studies are the reward token in and out of the
+     index. With no index there is nothing to study — not a failure, and not
+     worth a red run: say so and stop. */
+  if (!INDEX) {
+    console.log('no rewardsIndex in config.js yet — nothing to probe; set it once the platform routes this token');
+    return;
+  }
   console.log(`pool         ${POOL}`);
   console.log(`blocks       ${START_BLOCK} … ${head}  (${head - START_BLOCK + 1})`);
   console.log('');
