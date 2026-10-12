@@ -34,12 +34,14 @@ worker/               the same indexer as a Cloudflare Worker (optional)
 
 ## What's on the page
 
-- **Hero** — the banner (`images/banner.webp`, 1500×500, with a 1000px
-  `srcset` variant): the wordmark, "The phone that never dies.", "Buy $3210.
-  Get $NOKc." and the Base / Stonks.Exchange / Stockify marks. The `<h1>`
-  behind it is screen-reader only. Its edges are feathered into the page on
-  desktop; on a phone it runs edge to edge but is never overscanned, because
-  the banner has marks in its corners.
+- **Hero** — the header clip (`images/header.mp4`, H.264, and
+  `images/header.webm`, VP9 — the page picks whichever the browser plays),
+  looping silently and carrying the wordmark, "The phone that never dies."
+  and "Buy $3210. Get $NOKc." The `<h1>` behind it is screen-reader only. The
+  poster is the clip's own first frame, so poster → playback is seamless;
+  visitors with `prefers-reduced-motion: reduce` get the poster as a still and
+  the video never downloads. 672×448 is small, so the hero tops out at 960px
+  wide; its top glow and bottom reflection fade into the page.
 - **Actions** — three buttons: X, the chart, and a button that copies the CA
   and flashes a confirmation. Before launch the chart and copy buttons say so
   instead of opening an empty page.
@@ -314,6 +316,11 @@ cd worker && npm test
   except the Apple one, flattened onto the page navy because iOS renders a
   transparent home-screen icon as black. Bump the `?v=` with
   `node scripts/stamp.mjs` when the mark changes.
+- The header clip came as a 10s 672×448 mp4 with an audio track and a cover
+  image; `images/header.mp4` is its video only (CRF 22, faststart — 1.4 MB →
+  0.6 MB) and `images/header.webm` the same in VP9 (0.5 MB). The commands are
+  in `images/src/README.md`. Its ratio is encoded twice — the `width`/`height`
+  on the `<video>` and `.hero__media`'s `aspect-ratio` — change both together.
 - `images/social.jpg` is the 1200×630 share card: the banner whole, its top
   and bottom rows extended and faded into the ground — a 3:1 banner cropped to
   a card's 2:1 would lose its corner marks.
