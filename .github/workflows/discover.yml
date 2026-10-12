@@ -5,7 +5,7 @@ name: Discover token facts
 # this token's fees to. Runs on a GitHub runner because that is the only
 # machine in this loop with a route to Base, DexScreener and the platform API.
 #
-# $3210: contractAddress is set in config.js; this run reads the rest.
+# $3310: set contractAddress in config.js, then push a change here to run.
 #
 # Push to either path below to run it — the token this session holds gets 403
 # from workflow_dispatch, so a push to a watched path is the trigger.

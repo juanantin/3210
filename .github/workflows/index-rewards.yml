@@ -4,7 +4,7 @@ name: Index rewards
 # token holders. State lives in data/rewards-state.json, so each run resumes
 # where the last one stopped — a first backfill may take a few runs.
 #
-# THE SCHEDULE IS OFF until worker/src/config.js names $3210, its reward
+# THE SCHEDULE IS OFF until worker/src/config.js names $3310, its reward
 # token, its rewards index and its launch block. Running it earlier changes
 # nothing (scripts/index-rewards.mjs refuses while MISSING is non-empty) but
 # would fire four times an hour for no reason. To switch it on:

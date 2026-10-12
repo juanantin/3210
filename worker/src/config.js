@@ -1,5 +1,5 @@
 /* ==========================================================================
-   What the indexer watches — $3210 on Base.
+   What the indexer watches — $3310 on Base.
    --------------------------------------------------------------------------
    Every TODO here is read from the network by .github/workflows/discover.yml
    (scripts/discover-token.mjs) once config.js has the contract address —
@@ -8,35 +8,34 @@
 
    ⚠ Which on-chain flow is "fees collected" versus "distributed" is not
    self-evident: reconcile against what the launch platform and the rewards
-   index publish for $3210 before trusting a number — the traps are in
+   index publish for $3310 before trusting a number — the traps are in
    worker/README.md.
    ========================================================================== */
 
 export const CHAIN_ID = 8453;                    // Base
 
 export const TOKENS = {
-  // The token people buy — $3210
-  STR: '0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
+  // TODO: the token people buy — $3310
+  STR: null,
   // $NOKc, the reward token holders are paid in. symbol() "NOKc", name()
   // "Nokia Corporation", decimals() 8 — read on chain by discover.yml.
   KEX: '0xB2000000000000000000005ac674f707E357409c',
 };
 
 export const CONTRACTS = {
-  // $3210/$NOKc on Aerodrome Slipstream, the token's only pair.
-  pool: '0x2Ec52131c560105143E0Af64578a85cc74D503a1',
+  // TODO: the $3310 pool, from discover.yml.
+  pool: null,
   // Where trading fees accrue, from /api/coins. SHARED BY EVERY COIN launched
   // on this venue, so no stream may sum it — it is only excluded from holders.
   feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
   // TODO: the rewards index — the distributor holders are paid from, the one
-  // address here that is $3210's alone. Every stream below watches it.
-  // /api/fee-routing returned no route for $3210 when discovery ran.
+  // address here that is $3310's alone. Every stream below watches it.
   rewardsIndex: null,
 };
 
-// The block $3210 launched at — /api/coins block_number. Nothing relevant
-// happened before it, so the scan starts here rather than at genesis.
-export const START_BLOCK = 52516217;
+// TODO: the block $3310 launched at — /api/coins block_number. Left null the
+// indexer never runs; never 0, which would scan from genesis.
+export const START_BLOCK = null;
 
 /* Decimals, per token, READ FROM EACH CONTRACT rather than assumed — two
    constants, not one, because they can differ: a sibling site's reward token
@@ -75,7 +74,7 @@ export const STREAMS = [
 
 /* Share of the outflow that reaches holders — the rest is the protocol's cut.
 
-   TODO: read it off $3210's own rewards panel (it reads like "TO HOLDERS 90%
+   TODO: read it off $3310's own rewards panel (it reads like "TO HOLDERS 90%
    · 10% protocol"), then compare the indexer's totals against that panel's
    published figures before trusting either. Better still, set
    PROTOCOL_ADDRESS if the protocol's address turns up, since the cut is then

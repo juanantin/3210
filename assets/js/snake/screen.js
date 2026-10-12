@@ -1,5 +1,5 @@
 import { glyph } from './font.js';
-// The Nokia 3210 has an 84 x 48 monochrome LCD.
+// The Nokia 3310 has an 84 x 48 monochrome LCD.
 export const W = 84;
 export const H = 48;
 export class Screen {

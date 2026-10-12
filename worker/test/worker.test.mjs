@@ -23,7 +23,7 @@ const E18 = 10n ** 18n;
    a wrong scale — it agrees with whatever it is given, goes green, and leaves
    every reward figure on the site out by a power of ten.
 
-   For $3210 the reward token is $NOKc, whose decimals() returns 8 — read on
+   For $3310 the reward token is $NOKc, whose decimals() returns 8 — read on
    chain by the discovery run, not assumed. On $BOX this constant was 8 (AMZNc), and the 18 that looked obvious
    there published 25.244695737 as 2.5e-9. So: when this repo is pointed at a
    new token, this line changes to that token's reading, and this test failing

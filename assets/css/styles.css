@@ -1,8 +1,8 @@
 /* ==========================================================================
-   $3210 — styles
+   $3310 — styles
 
    The banner's world: a near-black navy lit by a blue glow from above, white
-   pixel type, and one bright blue (#2a9bfc, sampled from "BUY $3210. GET
+   pixel type, and one bright blue (#2a9bfc, sampled from "BUY $3310. GET
    $NOKc."). Built on the $BLUE template's bones — square corners, cards
    lifted by a stepped block shadow, cubes drifting in the gutters — which is
    already pixel art, and only had to be turned dark.
@@ -209,7 +209,7 @@ a { color: inherit; text-decoration: none; }
 /* The header clip IS the hero, as on $BLUE: it carries the wordmark and the
    line, so the page's <h1> is screen-reader only. Its ground is the page's
    navy, so it needs no frame: the glow at its top and the reflection at its
-   bottom fade into the page, and the sides only barely, because "$3210"
+   bottom fade into the page, and the sides only barely, because "$3310"
    starts 3% in from the left edge.
 
    672×448 is a small clip; at 960px it is already scaled up 1.4×, so the

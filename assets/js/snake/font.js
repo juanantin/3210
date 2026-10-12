@@ -1,4 +1,4 @@
-// Proportional 7px-cap bitmap font in the spirit of the Nokia 3210 menu font.
+// Proportional 7px-cap bitmap font in the spirit of the Nokia 3310 menu font.
 // Each glyph is a list of rows; '#' is a lit pixel. Rows 0-6 are the cap
 // height, rows 7-8 hold descenders.
 const G = {

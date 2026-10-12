@@ -6,8 +6,8 @@ Nothing in here is served by the page.
 | File | What it is | What comes from it |
 |---|---|---|
 | `header_master.mp4` | The header clip as delivered: 672×448, 10s, 24fps, with an audio track and a cover image | `images/header.mp4`, `images/header.webm` and `images/header_poster.webp` (its own first frame) |
-| `banner_master.jpg` | The $3210 banner, 1500×500 | `images/social.jpg` — the banner on 1200×630, its top and bottom rows extended and faded to #000e27 |
-| `token_master.webp` | The $3210 coin on transparency, 1254×1254 | `images/favicon.png`, `icon-192`, `icon-512`, `apple-touch-icon` (on #000e27) and `/favicon.ico` — trimmed to the coin's alpha bounds first |
+| `banner_master.jpg` | The $3310 banner, 1500×500 | `images/social.jpg` — the banner on 1200×630, its top and bottom rows extended and faded to #000e27 |
+| `token_master.webp` | The $3310 coin on transparency, 1254×1254 | `images/favicon.png`, `icon-192`, `icon-512`, `apple-touch-icon` (on #000e27) and `/favicon.ico` — trimmed to the coin's alpha bounds first |
 
 `images/phone.webp` was cut out of a studio photo of the phone (480×1168
 after cropping); the game's LCD and key positions in

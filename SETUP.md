@@ -1,23 +1,32 @@
-# Launch checklist — $3210
+# Launch checklist — $3310
 
-Done: the page, the game, the branding, the X link, the contract address
-(`0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35`), the Stonks.Exchange link, and
-everything `discover.yml` read off the network — the $NOKc reward token (8
-decimals), the pool, the fee locker and the launch block — in both
-`config.js` and `worker/src/config.js`. Market cap, liquidity, volume and
-holders are live.
+Done: the page, the game, the branding, the X link, and $NOKc as the reward
+token (`0xB2000000000000000000005ac674f707E357409c`, decimals 8) in both
+configs.
 
-**Left: the rewards index and the holders' share.** When discovery ran, the
-platform's `/api/fee-routing` had no route for $3210, so there is no
-distributor yet. Once Stockify has an index for it:
+**1. The $3310 contract address.** Put it in `config.js` `contractAddress`
+and `worker/src/config.js` `TOKENS.STR`, and push a change to
+`.github/workflows/discover.yml` so discovery runs: it reads the pool, the
+launch block, the supply and the platform's routing for the token. Copy the
+pool into `contracts.pool` / `CONTRACTS.pool` and the block into
+`launchBlock` / `START_BLOCK`, and the token's Stonks.Exchange page into
+`links.launchedIn`. Market cap, liquidity, volume and holders then come
+alive on their own.
 
-1. put its address in `config.js` `contracts.rewardsIndex` and
-   `worker/src/config.js` `CONTRACTS.rewardsIndex`, and its page in
+**2. Artwork.** The header clip (`images/header.*`), the share card
+(`images/social.jpg`) and the icons are drawn from $3210 art — the ticker is
+in the pixels. Replace the originals in `images/src/` and regenerate (the
+commands are in `images/src/README.md`).
+
+**3. The rewards index and the holders' share**, once Stockify has an index
+for $3310:
+
+1. its address in `config.js` `contracts.rewardsIndex` and
+   `worker/src/config.js` `CONTRACTS.rewardsIndex`, its page in
    `links.rewardsBy`
-2. set `holderShare` / `HOLDER_SHARE` from the index's own panel ("TO
-   HOLDERS 90%" on $BLUE's)
-3. seed `data/rewards-state.json` with `{"cursor": 52516217}` and uncomment
-   the schedule in `.github/workflows/index-rewards.yml`
+2. `holderShare` / `HOLDER_SHARE` from the index's own panel
+3. seed `data/rewards-state.json` with `{"cursor": <START_BLOCK>}` and
+   uncomment the schedule in `.github/workflows/index-rewards.yml`
 
 `MISSING` in `worker/src/config.js` then empties and the indexer starts.
 

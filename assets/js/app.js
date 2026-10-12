@@ -400,7 +400,7 @@
     }, Promise.resolve(null));
   }
 
-  var CACHE_KEY = 't3210:holders:' + address.toLowerCase();
+  var CACHE_KEY = 't3310:holders:' + address.toLowerCase();
   var CACHE_VERSION = 2;    // bump when the cached shape changes
 
   function readCache(startBlock) {
@@ -1058,9 +1058,9 @@
     })).then(function (v) { return v === undefined ? null : v; });
   }
 
-  /* What one $3210 is worth in the reward token, from the pool's own price.
+  /* What one $3310 is worth in the reward token, from the pool's own price.
      A pair prices its BASE in units of its QUOTE (priceNative), so the
-     answer is that price when $3210 is the base and its inverse when the
+     answer is that price when $3310 is the base and its inverse when the
      reward token is — and nothing at all for a pair of any other two. */
   function tokenInReward(pair) {
     if (!pair || !CFG.rewardTokenAddress) return null;
@@ -1193,7 +1193,7 @@
      drops the 7,205,199 that came of picking the loudest token; v4 drops the
      zero dollar figures the dead scan left behind, which the derivation then
      refused to overwrite. */
-  var STATS_KEY = 't3210:stats:v4:' + String(address).toLowerCase();
+  var STATS_KEY = 't3310:stats:v4:' + String(address).toLowerCase();
 
   function readStats() {
     try {
@@ -1371,7 +1371,7 @@
       }
 
       /* Market cap and liquidity, when DexScreener resolved the pair but had
-         no dollar figure for it. The pool's own price gives $3210 in the
+         no dollar figure for it. The pool's own price gives $3310 in the
          reward token, the reward token's dollar price does the rest; the
          supply is fixed, and the pool's balances are read off the chain.
          Anything DexScreener does report outranks these. */

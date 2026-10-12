@@ -1,5 +1,5 @@
 /* ==========================================================================
-   SITE CONFIGURATION — $3210
+   SITE CONFIGURATION — $3310
    --------------------------------------------------------------------------
    This is the only file you need to edit to point the site at the token.
    Everything marked TODO has to be filled in before the dashboard shows live
@@ -12,13 +12,16 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '10',
+  version: '11',
 
   /* ---- Token ---------------------------------------------------------- */
 
-  // The $3210 contract address on Base. The CA button copies this, the chart
-  // button links to it, and DexScreener is searched by it.
-  contractAddress: '0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
+  // TODO: the $3310 contract address on Base. The CA button copies this, the
+  // chart button links to it, and DexScreener is searched by it. Until it is
+  // set the dashboard reads "Live data starts at launch". (The earlier $3210
+  // contract was cleared deliberately: the page must never offer it as the
+  // token to buy under the $3310 name.)
+  contractAddress: '',
 
   // $NOKc, the token holders are paid in — the other side of the pool. Read
   // off Base by the discover workflow: symbol() "NOKc", name() "Nokia
@@ -26,10 +29,11 @@ window.SITE_CONFIG = {
   rewardTokenAddress: '0xB2000000000000000000005ac674f707E357409c',
 
   // The reward token's symbol() exactly, as read on chain — and as the banner
-  // names it: "BUY $3210. GET $NOKc." Shown after the reward amounts.
+  // names it: "BUY $3310. GET $NOKc." Shown after the reward amounts.
   rewardTokenSymbol: 'NOKc',
 
-  // Fixed at launch: totalSupply() reads 1,000,000,000 (18 decimals). Used to
+  // 1,000,000,000 at 18 decimals, the platform's launch supply — confirm it
+  // against totalSupply() when discovery runs on the $3310 address. Used to
   // turn the pool's price into a market cap when DexScreener has no dollar
   // figure for the pair — it cannot price $NOKc on its own.
   totalSupply: 1000000000,
@@ -46,9 +50,10 @@ window.SITE_CONFIG = {
   chain: 'base',    // DexScreener chain slug
   chainId: 8453,    // EVM chain id
 
-  // The block $3210 launched at, from the platform's own /api/coins entry
-  // (block_number). The holder scan starts here.
-  launchBlock: 52516217,
+  // TODO: the block $3310 launched at, from the platform's /api/coins entry
+  // (block_number) — discover.yml reads it. The holder scan starts here, and
+  // is skipped while this is null.
+  launchBlock: null,
 
   // TODO: holders' share of what leaves the rewards index; the rest is the
   // protocol's cut. Read it off the token's own rewards panel. While null the
@@ -65,15 +70,15 @@ window.SITE_CONFIG = {
                     SHARED by every token, so it is excluded, never summed
        rewardsIndex the distributor holders are paid from: the index */
   contracts: {
-    // $3210/$NOKc on Aerodrome Slipstream — the token's only pair, named by
-    // both DexScreener and the platform's /api/coins entry.
-    pool: '0x2Ec52131c560105143E0Af64578a85cc74D503a1',
+    // TODO: the $3310 pool, from discover.yml. Leave null until certain: a
+    // wrong pool reports another token's figures.
+    pool: null,
     rewardPool: null,
     // The platform's fee locker for this venue. Excluded from holders, never
     // summed: it is shared by every coin launched the same way.
     feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
     // TODO: the Stockify index. The platform's /api/fee-routing had no route
-    // for $3210 when discovery ran, so there is no distributor to watch yet.
+    // for $3310 when discovery ran, so there is no distributor to watch yet.
     rewardsIndex: null,
   },
 
@@ -88,7 +93,7 @@ window.SITE_CONFIG = {
     // The two lockups in the footer panel: the token's own page on
     // Stonks.Exchange, and (TODO) its Stockify index — until that is set the
     // Stockify lockup points at the platform's home page.
-    launchedIn: 'https://www.thestonks.exchange/token/0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35',
+    launchedIn: null,   // TODO: the $3310 page on Stonks.Exchange
     rewardsBy: null,
   },
 

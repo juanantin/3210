@@ -1,8 +1,8 @@
 {
-  "name": "3210",
+  "name": "3310",
   "private": true,
   "type": "module",
-  "description": "$3210 — Snake, on Base. Static site; the build only copies the served files into dist/.",
+  "description": "$3310 — Snake, on Base. Static site; the build only copies the served files into dist/.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "stamp": "node scripts/stamp.mjs"

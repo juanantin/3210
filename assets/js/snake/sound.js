@@ -1,4 +1,4 @@
-// Monophonic square-wave beeps, like the 3210's piezo buzzer.
+// Monophonic square-wave beeps, like the 3310's piezo buzzer.
 let ctx = null;
 export const sound = {
   enabled: true,

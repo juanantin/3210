@@ -1,6 +1,6 @@
-# $3210 — the phone that never dies
+# $3310 — the phone that never dies
 
-The site for the $3210 token on Base — *buy $3210, get $NOKc*: the banner, a
+The site for the $3310 token on Base — *buy $3310, get $NOKc*: the banner, a
 live dashboard, and classic Snake playable on a Nokia-style phone right on
 the page. Static
 HTML/CSS/JS — no dependencies, no framework, and no build beyond copying
@@ -12,13 +12,14 @@ sources, the indexer and the deploy setup are that site's, re-pointed. Where a
 lesson below quotes another token's numbers, those numbers are the evidence —
 the behaviour they describe is the platform's.
 
-**Status: launched.** Contract `0xd02a25c2cE6FEFF3a1DA74044aAFBa32aed4fC35`
-on Base, trading against **$NOKc** (`0xB200…409c`, 8 decimals) in its only
-pool, Aerodrome Slipstream `0x2Ec5…03a1`, launched at block 52,516,217 — all
-read off the network by `discover.yml`, not assumed. Market cap, liquidity,
-volume and holders are live. Fees collected and $NOKc distributed wait on one
-thing: the platform had **no rewards index routed** for $3210 when discovery
-ran, so there is no distributor to watch yet — see [`SETUP.md`](SETUP.md).
+**Status: pre-launch, as $3310.** The site was first pointed at a $3210
+contract; the ticker is now **$3310**, a new token, so that contract and
+everything read off it (pool, launch block) were cleared rather than shown
+under the new name. The dashboard reads "Live data starts at launch" until
+`config.js` has the $3310 address. Still the same: the X link, the domain,
+and **$NOKc** (`0xB200…409c`, 8 decimals) as the reward token. The header
+clip, the share card and the coin icon still draw "$3210" into the artwork —
+they need new files for $3310. [`SETUP.md`](SETUP.md) is the checklist.
 
 ```
 index.html            markup
@@ -48,7 +49,7 @@ Live at **https://3210nokc.xyz** (Vercel).
 - **Hero** — the header clip (`images/header.mp4`, H.264, and
   `images/header.webm`, VP9 — the page picks whichever the browser plays),
   looping silently and carrying the wordmark, "The phone that never dies."
-  and "Buy $3210. Get $NOKc." The `<h1>` behind it is screen-reader only. The
+  and "Buy $3310. Get $NOKc." The `<h1>` behind it is screen-reader only. The
   poster is the clip's own first frame, so poster → playback is seamless;
   visitors with `prefers-reduced-motion: reduce` get the poster as a still and
   the video never downloads. 672×448 is small, so the hero tops out at 960px
@@ -71,7 +72,7 @@ Live at **https://3210nokc.xyz** (Vercel).
   Supply is 1,000,000,000 (1B).
 - **Ecosystem** — two partner lockups whose hrefs come from `config.js`.
 - **Footer** — the non-affiliation notice (the phone artwork resembles a
-  Nokia handset; $3210 has nothing to do with Nokia or HMD Global).
+  Nokia handset; $3310 has nothing to do with Nokia or HMD Global).
 
 ## Design
 
@@ -79,7 +80,7 @@ The banner's world, on the template's bones. A near-black navy page
 (`--page` #000e27, the banner's own edge colour, so the hero has no seam) lit
 by a blue glow from the top; cards a shade lighter, square-cornered and lifted
 by a stepped block shadow; one bright blue (`--accent` #2a9bfc, sampled from
-"BUY $3210. GET $NOKc."), a lighter tint for text (`--accent-deep` #7cc2ff),
+"BUY $3310. GET $NOKc."), a lighter tint for text (`--accent-deep` #7cc2ff),
 and the LCD's green (`--lcd`) on the game card. Cubes drift in the gutters in
 both colours.
 
@@ -104,10 +105,10 @@ renders as `—` rather than as a number that isn't real.
 
 ### Market data — DexScreener, and the pool itself
 
-$3210's only pair is quoted in $NOKc, which DexScreener cannot price — so it
+$3310's only pair is quoted in $NOKc, which DexScreener cannot price — so it
 resolves the pair and its 24h volume but reports no dollar market cap or
 liquidity. When that happens the page derives both rather than showing
-dashes: the pool's own price gives $3210 in $NOKc, the $NOKc dollar price
+dashes: the pool's own price gives $3310 in $NOKc, the $NOKc dollar price
 comes from GeckoTerminal (the reward-price chain below), the supply is fixed
 (`totalSupply` in `config.js`), and the pool's balance of each side is read
 off Base with two `balanceOf` calls (`tokenDecimals` / `rewardTokenDecimals`).
@@ -194,7 +195,7 @@ pushes. Set `sources.rewards.enabled: true` once the file holds real figures.
 > live market cap, liquidity and volume — which is why it ships disabled.
 
 **2. Let GitHub Actions index it — no accounts, no infrastructure. This is
-the plan for $3210.**
+the plan for $3310.**
 [`.github/workflows/index-rewards.yml`](.github/workflows/index-rewards.yml)
 runs [`scripts/index-rewards.mjs`](scripts/index-rewards.mjs), scans Base, and
 commits the refreshed `data/rewards.json` — the file the site already reads. It
