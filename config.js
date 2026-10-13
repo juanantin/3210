@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '23',
+  version: '24',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -84,8 +84,8 @@ window.SITE_CONFIG = {
   links: {
     x: 'https://x.com/3310onbase',
 
-    // Leave null to auto-build a DexScreener link from the contract address.
-    chart: null,
+    // The $3310/$NOKc pool on DexScreener. Null builds a link from the contract address.
+    chart: 'https://dexscreener.com/base/0xb51a37a046f7df48a9a81534e9217af0d4399e11',
 
     // The two lockups in the footer panel: the token's own page on
     // Stonks.Exchange, and (TODO) its Stockify index — until that is set the
