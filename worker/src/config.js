@@ -15,8 +15,8 @@
 export const CHAIN_ID = 8453;                    // Base
 
 export const TOKENS = {
-  // TODO: the token people buy — $3310
-  STR: null,
+  // The token people buy — $3310
+  STR: '0x5bC16E5322578114EaDC9eF9B94731B5a17d13B9',
   // $NOKc, the reward token holders are paid in. symbol() "NOKc", name()
   // "Nokia Corporation", decimals() 8 — read on chain by discover.yml.
   KEX: '0xB2000000000000000000005ac674f707E357409c',
@@ -28,9 +28,9 @@ export const CONTRACTS = {
   // Where trading fees accrue, from /api/coins. SHARED BY EVERY COIN launched
   // on this venue, so no stream may sum it — it is only excluded from holders.
   feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
-  // TODO: the rewards index — the distributor holders are paid from, the one
+  // The $3310 Stockify index — the distributor holders are paid from, the one
   // address here that is $3310's alone. Every stream below watches it.
-  rewardsIndex: null,
+  rewardsIndex: '0xdad6D69e44e2601eaFeb550c9B63aF222aA7692e',
 };
 
 // TODO: the block $3310 launched at — /api/coins block_number. Left null the

@@ -5,7 +5,8 @@ name: Discover token facts
 # this token's fees to. Runs on a GitHub runner because that is the only
 # machine in this loop with a route to Base, DexScreener and the platform API.
 #
-# $3310: set contractAddress in config.js, then push a change here to run.
+# $3310: contractAddress and the Stockify index are set; this run reads the rest
+# and checks the index really moves $NOKc.
 #
 # Push to either path below to run it — the token this session holds gets 403
 # from workflow_dispatch, so a push to a watched path is the trigger.
@@ -36,5 +37,5 @@ jobs:
           RPC_URL: ${{ secrets.RPC_URL }}
           # Addresses to test as the distributor: the reward token should flow
           # both in and out of the real one. Comma-separated.
-          CANDIDATES: ''
+          CANDIDATES: '0xdad6d69e44e2601eafeb550c9b63af222aa7692e'
         run: node scripts/discover-token.mjs

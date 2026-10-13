@@ -12,16 +12,13 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '15',
+  version: '16',
 
   /* ---- Token ---------------------------------------------------------- */
 
-  // TODO: the $3310 contract address on Base. The CA button copies this, the
-  // chart button links to it, and DexScreener is searched by it. Until it is
-  // set the dashboard reads "Live data starts at launch". (The earlier $3210
-  // contract was cleared deliberately: the page must never offer it as the
-  // token to buy under the $3310 name.)
-  contractAddress: '',
+  // The $3310 contract address on Base. The CA button copies this, the chart
+  // button links to it, and DexScreener is searched by it.
+  contractAddress: '0x5bC16E5322578114EaDC9eF9B94731B5a17d13B9',
 
   // $NOKc, the token holders are paid in — the other side of the pool. Read
   // off Base by the discover workflow: symbol() "NOKc", name() "Nokia
@@ -77,9 +74,9 @@ window.SITE_CONFIG = {
     // The platform's fee locker for this venue. Excluded from holders, never
     // summed: it is shared by every coin launched the same way.
     feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
-    // TODO: the Stockify index. The platform's /api/fee-routing had no route
-    // for $3310 when discovery ran, so there is no distributor to watch yet.
-    rewardsIndex: null,
+    // The $3310 Stockify index — the distributor holders are paid from, and
+    // the one address here that is $3310's alone.
+    rewardsIndex: '0xdad6D69e44e2601eaFeb550c9B63aF222aA7692e',
   },
 
   /* ---- Links ---------------------------------------------------------- */
@@ -93,8 +90,8 @@ window.SITE_CONFIG = {
     // The two lockups in the footer panel: the token's own page on
     // Stonks.Exchange, and (TODO) its Stockify index — until that is set the
     // Stockify lockup points at the platform's home page.
-    launchedIn: null,   // TODO: the $3310 page on Stonks.Exchange
-    rewardsBy: null,
+    launchedIn: 'https://www.thestonks.exchange/token/0x5bC16E5322578114EaDC9eF9B94731B5a17d13B9',
+    rewardsBy: 'https://www.stockify.finance/indices/0xdad6D69e44e2601eaFeb550c9B63aF222aA7692e',
   },
 
   /* ======================================================================
