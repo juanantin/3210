@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '16',
+  version: '17',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -29,8 +29,8 @@ window.SITE_CONFIG = {
   // names it: "BUY $3310. GET $NOKc." Shown after the reward amounts.
   rewardTokenSymbol: 'NOKc',
 
-  // 1,000,000,000 at 18 decimals, the platform's launch supply — confirm it
-  // against totalSupply() when discovery runs on the $3310 address. Used to
+  // 1,000,000,000 at 18 decimals — totalSupply() as read on chain by
+  // discover.yml. Used to
   // turn the pool's price into a market cap when DexScreener has no dollar
   // figure for the pair — it cannot price $NOKc on its own.
   totalSupply: 1000000000,
@@ -47,10 +47,9 @@ window.SITE_CONFIG = {
   chain: 'base',    // DexScreener chain slug
   chainId: 8453,    // EVM chain id
 
-  // TODO: the block $3310 launched at, from the platform's /api/coins entry
-  // (block_number) — discover.yml reads it. The holder scan starts here, and
-  // is skipped while this is null.
-  launchBlock: null,
+  // The block $3310 launched at — the platform's /api/coins block_number,
+  // read by discover.yml. The holder and rewards scans start here.
+  launchBlock: 52559259,
 
   // TODO: holders' share of what leaves the rewards index; the rest is the
   // protocol's cut. Read it off the token's own rewards panel. While null the
@@ -67,15 +66,16 @@ window.SITE_CONFIG = {
                     SHARED by every token, so it is excluded, never summed
        rewardsIndex the distributor holders are paid from: the index */
   contracts: {
-    // TODO: the $3310 pool, from discover.yml. Leave null until certain: a
-    // wrong pool reports another token's figures.
-    pool: null,
+    // $3310/$NOKc on Aerodrome Slipstream — the token's only pair, named by
+    // both DexScreener and the platform's /api/coins entry.
+    pool: '0xb51A37a046f7DF48a9a81534e9217aF0d4399e11',
     rewardPool: null,
     // The platform's fee locker for this venue. Excluded from holders, never
     // summed: it is shared by every coin launched the same way.
     feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
     // The $3310 Stockify index — the distributor holders are paid from, and
-    // the one address here that is $3310's alone.
+    // the one address here that is $3310's alone. The platform's /api/coins
+    // entry names it as the pool's fee_owner, so fees are routed to it.
     rewardsIndex: '0xdad6D69e44e2601eaFeb550c9B63aF222aA7692e',
   },
 

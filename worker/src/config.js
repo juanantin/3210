@@ -23,8 +23,8 @@ export const TOKENS = {
 };
 
 export const CONTRACTS = {
-  // TODO: the $3310 pool, from discover.yml.
-  pool: null,
+  // $3310/$NOKc on Aerodrome Slipstream, the token's only pair.
+  pool: '0xb51A37a046f7DF48a9a81534e9217aF0d4399e11',
   // Where trading fees accrue, from /api/coins. SHARED BY EVERY COIN launched
   // on this venue, so no stream may sum it — it is only excluded from holders.
   feeLocker: '0x43555104f569d17026037e5637691b95c79fd03a',
@@ -33,9 +33,9 @@ export const CONTRACTS = {
   rewardsIndex: '0xdad6D69e44e2601eaFeb550c9B63aF222aA7692e',
 };
 
-// TODO: the block $3310 launched at — /api/coins block_number. Left null the
-// indexer never runs; never 0, which would scan from genesis.
-export const START_BLOCK = null;
+// The block $3310 launched at — /api/coins block_number, read by
+// discover.yml. Nothing relevant happened before it.
+export const START_BLOCK = 52559259;
 
 /* Decimals, per token, READ FROM EACH CONTRACT rather than assumed — two
    constants, not one, because they can differ: a sibling site's reward token

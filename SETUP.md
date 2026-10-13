@@ -1,32 +1,20 @@
 # Launch checklist — $3310
 
-Done: the page, the game, the branding, the X link (@3310onbase), and $NOKc as the reward
-token (`0xB2000000000000000000005ac674f707E357409c`, decimals 8) in both
-configs.
+Done: the page, the game, the artwork, X (@3310onbase), and everything for
+the token — contract, pool, launch block, $NOKc and its decimals, the
+Stockify index and both partner links — in `config.js` and
+`worker/src/config.js`, read off the network by `discover.yml`.
+`data/rewards-state.json` is seeded at the launch block.
 
-**1. The $3310 contract address.** Put it in `config.js` `contractAddress`
-and `worker/src/config.js` `TOKENS.STR`, and push a change to
-`.github/workflows/discover.yml` so discovery runs: it reads the pool, the
-launch block, the supply and the platform's routing for the token. Copy the
-pool into `contracts.pool` / `CONTRACTS.pool` and the block into
-`launchBlock` / `START_BLOCK`, and the token's Stonks.Exchange page into
-`links.launchedIn`. Market cap, liquidity, volume and holders then come
-alive on their own.
+**Left: the holders' share.** Read it off the index's Stockify panel ("TO
+HOLDERS 90%" on $BLUE's), then:
 
-**2. Artwork.** Done: the header, the share card and the icons all come
-from the $3310 header (`images/src/README.md` says how).
+1. set `holderShare` in `config.js` and `HOLDER_SHARE` in
+   `worker/src/config.js` (0.9 for 90%) — `MISSING` empties
+2. uncomment the schedule in `.github/workflows/index-rewards.yml`
 
-**3. The rewards index and the holders' share**, once Stockify has an index
-for $3310:
-
-1. its address in `config.js` `contracts.rewardsIndex` and
-   `worker/src/config.js` `CONTRACTS.rewardsIndex`, its page in
-   `links.rewardsBy`
-2. `holderShare` / `HOLDER_SHARE` from the index's own panel
-3. seed `data/rewards-state.json` with `{"cursor": <START_BLOCK>}` and
-   uncomment the schedule in `.github/workflows/index-rewards.yml`
-
-`MISSING` in `worker/src/config.js` then empties and the indexer starts.
+Until then fees collected is measured live in the browser and $NOKc
+distributed shows a dash: an unset share is unknown, not zero.
 
 ## 0. Let the network answer first
 

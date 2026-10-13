@@ -12,13 +12,15 @@ sources, the indexer and the deploy setup are that site's, re-pointed. Where a
 lesson below quotes another token's numbers, those numbers are the evidence —
 the behaviour they describe is the platform's.
 
-**Status: pre-launch, as $3310.** The site was first pointed at a $3210
-contract; the ticker is now **$3310**, a new token, so that contract and
-everything read off it (pool, launch block) were cleared rather than shown
-under the new name. The dashboard reads "Live data starts at launch" until
-`config.js` has the $3310 address. X is now @3310onbase. Still the same: the domain,
-and **$NOKc** (`0xB200…409c`, 8 decimals) as the reward token. The header,
-the share card and the icons are the $3310 artwork. [`SETUP.md`](SETUP.md) is the checklist.
+**Status: launched.** $3310 is `0x5bC16E5322578114EaDC9eF9B94731B5a17d13B9`
+on Base, trading against **$NOKc** (`0xB200…409c`, 8 decimals) in its only
+pool, Aerodrome Slipstream `0xb51A…9e11`, from block 52,559,259; its rewards
+index is Stockify `0xdad6…692e`, which the platform names as the pool's fee
+owner — all read off the network by `discover.yml`. Market cap, liquidity,
+volume, holders and fees collected are live. **$NOKc distributed waits for
+one number, the holders' share** from the index's Stockify panel; until it is
+set the tile shows a dash rather than a guess. (The site was first pointed at
+a $3210 contract; that was cleared when the ticker became $3310.)
 
 ```
 index.html            markup

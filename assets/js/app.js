@@ -561,8 +561,12 @@
     var c = CFG.contracts || {};
     var reward = CFG.rewardTokenAddress;
     var index = c.rewardsIndex;
-    var holderShare = Number(CFG.holderShare);
-    var wantFlows = !!(reward && index && isFinite(holderShare));
+    /* Number(null) is 0, and a share of 0 would publish "0 distributed" as a
+       measured fact. An unset share is unknown, not zero: fees collected can
+       still be measured, but distributed waits for the share to be set. */
+    var holderShare = CFG.holderShare == null ? null : Number(CFG.holderShare);
+    if (holderShare !== null && !(isFinite(holderShare) && holderShare > 0 && holderShare <= 1)) holderShare = null;
+    var wantFlows = !!(reward && index);
 
     // The pool, the fee locker and the distributor hold supply without being
     // holders in the sense the tile means.
@@ -807,7 +811,9 @@
             // is a millionfold error, silently.
             out.feesTokens = toTokens(BigInt(feesIn[token] || '0'), meta.decimals);
             // Not the whole outflow — that carries the protocol's cut.
-            out.distributed = toTokens(BigInt(paidOut[token] || '0'), meta.decimals) * holderShare;
+            if (holderShare !== null) {
+              out.distributed = toTokens(BigInt(paidOut[token] || '0'), meta.decimals) * holderShare;
+            }
             log('chain', 'reward token', meta.symbol, token, meta.decimals + 'dp',
                 '| in', out.feesTokens, '| to holders', out.distributed);
             if (String(reward).toLowerCase() !== token) {
