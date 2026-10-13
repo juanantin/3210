@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '20',
+  version: '21',
 
   /* ---- Token ---------------------------------------------------------- */
 

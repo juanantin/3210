@@ -35,10 +35,10 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=20" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=20">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=20">
-<link rel="manifest" href="site.webmanifest?v=20">
+<link rel="icon" href="favicon.ico?v=21" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=21">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=21">
+<link rel="manifest" href="site.webmanifest?v=21">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -56,7 +56,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=20">
+<link rel="stylesheet" href="assets/css/styles.css?v=21">
 </head>
 <body>
 
@@ -145,12 +145,12 @@
     <div class="hero__stage">
     <video
       class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=20"
+      poster="images/header_poster.webp?v=21"
       width="1080" height="720"
       autoplay muted loop playsinline preload="none"
       aria-label="$3310 — the phone that never dies. A blue Nokia 3310 on a glowing blue stage, its screen cycling through Snake, BUY and $3310, beside BUY $3310. GET $NOKc., on Base."
-      data-src="images/header.mp4?v=20"
-      data-src-webm="images/header.webm?v=20"></video>
+      data-src="images/header.mp4?v=21"
+      data-src-webm="images/header.webm?v=21"></video>
 
     <script>
       (function () {
@@ -359,25 +359,25 @@
       <button class="game__sound" type="button" data-sound-toggle>Sound: on</button>
     </div>
     <div class="game__phone" data-snake></div>
+    <!-- ===================== LEADERBOARD ===================== -->
+    <!-- Shared by everyone: api/scores.js replays each run before it counts.
+         assets/js/snake/scores.js fills the list. -->
+    <div class="board" data-board aria-labelledby="board-title">
+      <div class="board__head">
+        <h2 class="board__title" id="board-title">Top scores</h2>
+        <div class="board__tabs" role="tablist" aria-label="Leaderboard period">
+          <button type="button" role="tab" data-board-tab="week" aria-selected="true">This week</button>
+          <button type="button" role="tab" data-board-tab="all" aria-selected="false">All-time</button>
+        </div>
+      </div>
+      <ol class="board__list" data-board-list>
+        <li class="board__empty">Loading…</li>
+      </ol>
+      <p class="board__note" data-board-note></p>
+      <p class="board__fine">Every score is replayed move by move on the server before it counts. Add a wallet to get the <span class="board__holder">$3310</span> badge if you hold.</p>
+    </div>
   </section>
 
-  <!-- ===================== LEADERBOARD ===================== -->
-  <!-- Shared by everyone: api/scores.js replays each run before it counts.
-       assets/js/snake/scores.js fills the list. -->
-  <section class="board" data-board aria-labelledby="board-title">
-    <div class="board__head">
-      <h2 class="board__title" id="board-title">Top scores</h2>
-      <div class="board__tabs" role="tablist" aria-label="Leaderboard period">
-        <button type="button" role="tab" data-board-tab="week" aria-selected="true">This week</button>
-        <button type="button" role="tab" data-board-tab="all" aria-selected="false">All-time</button>
-      </div>
-    </div>
-    <ol class="board__list" data-board-list>
-      <li class="board__empty">Loading…</li>
-    </ol>
-    <p class="board__note" data-board-note></p>
-    <p class="board__fine">Every score is replayed move by move on the server before it counts. Add a wallet to get the <span class="board__holder">$3310</span> badge if you hold.</p>
-  </section>
 
   <!-- ===================== TOKEN FACTS ===================== -->
   <!-- Fixed properties of the token, so they are written here rather than
@@ -480,8 +480,8 @@
     });
   })();
 </script>
-<script src="config.js?v=20"></script>
-<script src="assets/js/app.js?v=20"></script>
-<script type="module" src="assets/js/snake/phone.js?v=20"></script>
+<script src="config.js?v=21"></script>
+<script src="assets/js/app.js?v=21"></script>
+<script type="module" src="assets/js/snake/phone.js?v=21"></script>
 </body>
 </html>
