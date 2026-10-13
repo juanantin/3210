@@ -285,6 +285,27 @@ behaviour, not a bug: nothing invented is shown as real.
 
 `refreshSeconds` controls the poll interval (default 60).
 
+## Leaderboard
+
+Snake scores are shared by every visitor: **Top scores**, this week and
+all-time, under the game.
+
+- `api/ticket.js` hands the phone a one-use seed before each game; the seed
+  decides where the food falls (`assets/js/snake/rules.js`).
+- When a game ends the visitor can submit it with a name and, optionally, a
+  wallet. `api/scores.js` replays the run turn by turn with the same rules and
+  records the score the replay reaches, never the one claimed. A ticket works
+  once, and a run that arrives faster than its steps take to play is refused.
+- A wallet holding any $3310 gets a `$3310` badge (checked on Base when the
+  score is submitted). Wallets are what a prize payout would go to.
+- Storage is the Upstash Redis store connected in Vercel ▸ Storage; it sets
+  `KV_REST_API_URL` / `KV_REST_API_TOKEN` on the project. Without it the game
+  plays as before and the board reads "offline".
+- To remove an entry: in the Upstash console, `ZREM lb:all <player>` and
+  `HDEL lb:all:meta <player>` (and the same on `lb:w:<week>`). A player is
+  their lowercased wallet, or `n:<NAME>`.
+- `npm test` covers the replay and the API against an in-memory store.
+
 ## Deploying
 
 **This site deploys to Vercel.** `vercel.json` sets the build to

@@ -11,6 +11,7 @@
 import { Engine } from './engine.js';
 import { Screen, W, H } from './screen.js';
 import { sound } from './sound.js';
+import { attach } from './scores.js';
 
 // The phone photo is 480 x 1168. Hit areas are centre x, centre y, width,
 // height in photo pixels, placed over the keys printed in the photo.
@@ -123,6 +124,7 @@ function mount(root) {
 
   root.appendChild(phone);
   phone.engine = engine; // for tests and the console
+  attach(phone);
 
   // Arrow keys belong to the page until the phone has focus.
   phone.addEventListener('pointerdown', () => phone.focus({ preventScroll: true }));

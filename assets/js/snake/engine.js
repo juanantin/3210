@@ -1,24 +1,15 @@
 import { W } from './screen.js';
 import { sound } from './sound.js';
-// Playfield: 20 x 11 cells of 4 x 4 px inside a 1 px border with a 1 px gap.
-const COLS = 20;
-const ROWS = 11;
+import { Board, DIRS, SPEED } from './rules.js';
+// Playfield cells are 4 x 4 px inside a 1 px border with a 1 px gap.
 const CELL = 4;
 const OX = 2;
 const OY = 2;
-// Milliseconds per step for levels 1-9.
-const SPEED = [0, 500, 420, 350, 290, 235, 190, 150, 115, 85];
 const MENU = ['New game', 'Level', 'Top score', 'Instructions'];
 const HELP =
   'Guide the snake to the food. Every bite makes it longer and earns ' +
   "points - more on higher levels. Don't hit the walls or your own tail!\n" +
   'Steer with keys 2, 4, 6 and 8. Navi key pauses.';
-const DIRS = {
-  up: { x: 0, y: -1 },
-  down: { x: 0, y: 1 },
-  left: { x: -1, y: 0 },
-  right: { x: 1, y: 0 },
-};
 const KEY_DIR = {
   2: 'up',
   up: 'up',
@@ -52,12 +43,15 @@ export class Engine {
   topScore = load('snake.top', 0);
   helpScroll = 0;
   helpLines = [];
-  snake = [];
-  dir = DIRS.right;
+  board = null;
   queue = [];
-  food = { x: 0, y: 0 };
-  score = 0;
   nextStep = 0;
+  // The run being played: its seed, level and every turn, so the leaderboard
+  // can replay it (rules.js). ticketSource() hands out a server-issued seed;
+  // onOver(run) is told when a game ends.
+  run = null;
+  ticketSource = null;
+  onOver = null;
   newRecord = false;
   screen;
   constructor(screen) {
@@ -135,6 +129,18 @@ export class Engine {
         break;
     }
   }
+  get snake() {
+    return this.board?.snake ?? [];
+  }
+  get food() {
+    return this.board?.food ?? { x: -9, y: -9 };
+  }
+  get score() {
+    return this.board?.score ?? 0;
+  }
+  get dir() {
+    return this.board?.dir ?? DIRS.right;
+  }
   turn(d) {
     if (this.queue.length >= 2) return;
     const last = this.queue[this.queue.length - 1] ?? this.dir;
@@ -143,52 +149,22 @@ export class Engine {
     this.queue.push(d);
   }
   startGame() {
-    const y = Math.floor(ROWS / 2);
-    this.snake = [];
-    for (let i = 0; i < 5; i++) this.snake.push({ x: 8 - i, y });
-    this.dir = DIRS.right;
+    const ticket = this.ticketSource?.() ?? null;
+    const seed = ticket ? ticket.seed : Math.floor(Math.random() * 2 ** 32);
+    this.board = new Board(seed, this.level);
+    this.run = { ticket: ticket?.id ?? null, seed, level: this.level, turns: [] };
     this.queue = [];
-    this.score = 0;
     this.newRecord = false;
-    this.placeFood();
     this.go('play');
     this.nextStep = this.now + SPEED[this.level];
   }
-  placeFood() {
-    const free = [];
-    for (let y = 0; y < ROWS; y++) {
-      for (let x = 0; x < COLS; x++) {
-        if (!this.snake.some((s) => s.x === x && s.y === y)) free.push({ x, y });
-      }
-    }
-    if (free.length === 0) return false;
-    this.food = free[Math.floor(Math.random() * free.length)];
-    return true;
-  }
   step() {
-    this.dir = this.queue.shift() ?? this.dir;
-    const head = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
-    const eating = head.x === this.food.x && head.y === this.food.y;
-    // The tail vacates its cell this step unless the snake is growing.
-    const body = eating ? this.snake : this.snake.slice(0, -1);
-    if (
-      head.x < 0 ||
-      head.y < 0 ||
-      head.x >= COLS ||
-      head.y >= ROWS ||
-      body.some((s) => s.x === head.x && s.y === head.y)
-    ) {
-      this.die();
-      return;
-    }
-    this.snake.unshift(head);
-    if (eating) {
-      this.score += this.level;
-      sound.eat();
-      if (!this.placeFood()) this.die();
-    } else {
-      this.snake.pop();
-    }
+    const b = this.board;
+    const d = this.queue.shift() ?? b.dir;
+    if (d !== b.dir) this.run.turns.push([b.steps, d.code]);
+    const r = b.step(d);
+    if (r === 'eat') sound.eat();
+    if (r === 'die' || !b.alive) this.die();
   }
   die() {
     sound.die();
@@ -198,6 +174,12 @@ export class Engine {
       save('snake.top', this.topScore);
     }
     this.go('dying');
+    const run = { ...this.run, steps: this.board.steps, score: this.score };
+    try {
+      this.onOver?.(run);
+    } catch {
+      // The leaderboard is optional; the game carries on without it.
+    }
   }
   update(now) {
     this.now = now;
