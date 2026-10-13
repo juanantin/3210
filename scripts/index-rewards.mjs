@@ -24,7 +24,20 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const STATE_FILE = path.join(ROOT, 'data', 'rewards-state.json');
 const OUT_FILE = path.join(ROOT, 'data', 'rewards.json');
 
-const RPC_URL = process.env.RPC_URL || 'https://mainnet.base.org';
+/* The endpoints the page itself uses (config.js holders.onchain.rpcUrls),
+   behind an RPC_URL secret if one is set. One public node is not enough: on
+   $3310's first run mainnet.base.org answered 429 to every retry and the run
+   ended 272 blocks short. Now a node that keeps refusing hands the same call
+   to the next one, and only a call every node refuses fails the run. */
+function siteRpcUrls() {
+  try {
+    const window = {};
+    new Function('window', fs.readFileSync(path.join(ROOT, 'config.js'), 'utf8'))(window);
+    return window.SITE_CONFIG?.sources?.holders?.onchain?.rpcUrls || [];
+  } catch { return []; }
+}
+const RPC_URLS = [process.env.RPC_URL, ...siteRpcUrls(), 'https://mainnet.base.org']
+  .filter((u, i, a) => u && a.indexOf(u) === i);
 // A run is bounded by wall clock, not chunk count: Actions bills by the minute
 // and a backfill can always finish on the next run.
 const BUDGET_MS = Number(process.env.BUDGET_MS || 8 * 60 * 1000);
@@ -46,6 +59,28 @@ function retrying(rpc, tries = 5) {
         wait *= 2;
       }
     }
+  };
+}
+
+/* Each call goes to the node that answered last; one that refuses it — after
+   its own retries — passes the same call to the next node in the list. */
+function failover(urls) {
+  const nodes = urls.map((u) => ({ url: u, rpc: retrying(makeRpc(u), 3) }));
+  let at = 0;
+  return async function (method, params) {
+    let firstErr = null;
+    for (let n = 0; n < nodes.length; n++) {
+      const node = nodes[(at + n) % nodes.length];
+      try {
+        const out = await node.rpc(method, params);
+        at = (at + n) % nodes.length;
+        return out;
+      } catch (err) {
+        firstErr = firstErr || err;
+        process.stdout.write(`  ${node.url}: ${String(err.message || err).slice(0, 120)} — next node\n`);
+      }
+    }
+    throw firstErr;
   };
 }
 
@@ -116,11 +151,12 @@ async function main() {
   }
 
   const started = Date.now();
-  const rpc = retrying(makeRpc(RPC_URL));
+  const rpc = failover(RPC_URLS);
+  console.log(`rpc nodes: ${RPC_URLS.length} (${RPC_URLS.map((u) => new URL(u).host).join(', ')})`);
   const state = loadState();
 
   const head = parseInt(await rpc('eth_blockNumber'), 16) - CONFIRMATIONS;
-  if (!isFinite(head) || head <= 0) throw new Error('bad head block from ' + RPC_URL);
+  if (!isFinite(head) || head <= 0) throw new Error('bad head block from ' + RPC_URLS.join(', '));
 
   const totals = {};
   SUM_STREAMS.forEach((s) => { totals[s.id] = BigInt(state.totals?.[s.id] || '0'); });
