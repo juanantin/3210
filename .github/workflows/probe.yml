@@ -85,10 +85,12 @@ jobs:
       # field, set by Vercel when it linked the project. The SITE_URL
       # repository variable (Settings ▸ Secrets and variables ▸ Actions ▸
       # Variables) overrides it, for a preview deployment or a custom domain.
+      # The deployed site at https://3210nokc.xyz — the domain the site is
+      # served on. A SITE_URL repository variable overrides it.
       - name: Probe the live site
-        if: steps.cfg.outputs.ready == 'true' && vars.SITE_URL != ''
+        if: steps.cfg.outputs.ready == 'true'
         env:
-          SITE_URL: ${{ vars.SITE_URL }}
+          SITE_URL: ${{ vars.SITE_URL || 'https://3210nokc.xyz' }}
         run: node scripts/page-probe.mjs
 
       # Reading these logs through the API returns only the TAIL of the job,
