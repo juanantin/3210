@@ -75,10 +75,15 @@ export const STREAMS = [
 /* Share of the outflow that reaches holders — the rest is the protocol's cut.
 
    From $3310's own Stockify panel, read by the probe workflow: "Holders 90% ·
-   Protocol 10% · Creator 0%". At the time the panel had not yet caught up
-   with the chain ("Unbound", nothing collected) while 15.84 NOKc had already
-   reached the index in 14 transfers — so once it shows totals, compare them
-   with data/rewards.json before quoting either. Better still, set
+   Protocol 10% · Creator 0%" — and borne out by its totals once payouts began
+   (2026-10-13, 17:00 UTC, after 6 rounds):
+
+       panel   FEES COLLECTED   183.89 NOKc ($1.81K)
+       panel   PAID TO HOLDERS  165.51 NOKc ($1.63K)   = 0.9 × 183.89
+
+   Compare data/rewards.json against the panel after the indexer next syncs:
+   its feesIn also counts NOKc that reached the index before the panel's first
+   "fees in" entry, so a small difference there is expected, not a fault. Better still, set
    PROTOCOL_ADDRESS if the protocol's address turns up, since the cut is then
    subtracted exactly and survives the percentage changing. */
 export const HOLDER_SHARE = 0.9;
