@@ -6,15 +6,11 @@ Stockify index and both partner links — in `config.js` and
 `worker/src/config.js`, read off the network by `discover.yml`.
 `data/rewards-state.json` is seeded at the launch block.
 
-**Left: the holders' share.** Read it off the index's Stockify panel ("TO
-HOLDERS 90%" on $BLUE's), then:
-
-1. set `holderShare` in `config.js` and `HOLDER_SHARE` in
-   `worker/src/config.js` (0.9 for 90%) — `MISSING` empties
-2. uncomment the schedule in `.github/workflows/index-rewards.yml`
-
-Until then fees collected is measured live in the browser and $NOKc
-distributed shows a dash: an unset share is unknown, not zero.
+**Nothing left to set.** The holders' share is 90% (the index's Stockify
+panel: Holders 90% · Protocol 10% · Creator 0%), and the indexer's schedule
+is on. When the Stockify panel starts showing totals, compare them with
+`data/rewards.json` — at launch the panel still read "Unbound" while the
+chain already showed $NOKc arriving at the index.
 
 ## 0. Let the network answer first
 

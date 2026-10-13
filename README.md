@@ -17,9 +17,9 @@ on Base, trading against **$NOKc** (`0xB200…409c`, 8 decimals) in its only
 pool, Aerodrome Slipstream `0xb51A…9e11`, from block 52,559,259; its rewards
 index is Stockify `0xdad6…692e`, which the platform names as the pool's fee
 owner — all read off the network by `discover.yml`. Market cap, liquidity,
-volume, holders and fees collected are live. **$NOKc distributed waits for
-one number, the holders' share** from the index's Stockify panel; until it is
-set the tile shows a dash rather than a guess. (The site was first pointed at
+volume and holders are live; fees collected and $NOKc distributed come from
+the indexer (`data/rewards.json`, four times an hour) with the holders' share
+at 90%, per the index's Stockify panel. (The site was first pointed at
 a $3210 contract; that was cleared when the ticker became $3310.)
 
 ```

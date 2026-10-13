@@ -74,12 +74,14 @@ export const STREAMS = [
 
 /* Share of the outflow that reaches holders — the rest is the protocol's cut.
 
-   TODO: read it off $3310's own rewards panel (it reads like "TO HOLDERS 90%
-   · 10% protocol"), then compare the indexer's totals against that panel's
-   published figures before trusting either. Better still, set
+   From $3310's own Stockify panel, read by the probe workflow: "Holders 90% ·
+   Protocol 10% · Creator 0%". At the time the panel had not yet caught up
+   with the chain ("Unbound", nothing collected) while 15.84 NOKc had already
+   reached the index in 14 transfers — so once it shows totals, compare them
+   with data/rewards.json before quoting either. Better still, set
    PROTOCOL_ADDRESS if the protocol's address turns up, since the cut is then
    subtracted exactly and survives the percentage changing. */
-export const HOLDER_SHARE = null;
+export const HOLDER_SHARE = 0.9;
 export const PROTOCOL_ADDRESS = null;
 
 // Without a share or the protocol's address, "distributed" cannot be computed.

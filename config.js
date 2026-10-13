@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '17',
+  version: '18',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -51,10 +51,10 @@ window.SITE_CONFIG = {
   // read by discover.yml. The holder and rewards scans start here.
   launchBlock: 52559259,
 
-  // TODO: holders' share of what leaves the rewards index; the rest is the
-  // protocol's cut. Read it off the token's own rewards panel. While null the
-  // "% to holder rewards" note stays hidden and distributed is not computed.
-  holderShare: null,
+  // Holders' share of what leaves the rewards index; the rest is the
+  // protocol's cut. From the index's own Stockify panel: "Holders 90% ·
+  // Protocol 10% · Creator 0%" (read by the probe workflow's panel pass).
+  holderShare: 0.9,
 
   /* Related contracts. All optional, all TODO.
        pool         the trading pair — DexScreener is asked about THIS pool
