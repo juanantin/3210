@@ -621,19 +621,40 @@
         var probeFrom = Math.max(startBlock, head - 1000);
         var range = { fromBlock: '0x' + probeFrom.toString(16), toBlock: '0x' + head.toString(16) };
 
-        return strategies.reduce(function (chain, strat) {
-          return chain.then(function (found) {
-            if (found) return found;
-            calls++;
-            return rpcCall(node.url, 'eth_getLogs', [flowFilter(strat, 'to', range)]).then(
-              function () { log('chain', 'flow filter accepted:', strat.id); return strat; },
-              function (e) {
-                log('chain', 'flow filter rejected (' + strat.id + '):', e.message);
-                flowNote = e.message;
-                return null;
+        /* A node that is merely BUSY (429, 5xx) has said nothing about the
+           filter, so the same shape is asked of the next node instead of being
+           written off: on $3310's launch day mainnet.base.org answered 429 to
+           both shapes and every visitor's scan fell back to holders only. A
+           node that refuses the SHAPE moves on to the next shape. Whichever
+           node accepts becomes the one the scan runs on. */
+        var order = urls.slice(node.index || 0).concat(urls.slice(0, node.index || 0));
+
+        function tryShape(strat, k) {
+          if (k >= order.length) return Promise.resolve(null);
+          calls++;
+          return rpcCall(order[k], 'eth_getLogs', [flowFilter(strat, 'to', range)]).then(
+            function () {
+              if (order[k] !== node.url) {
+                log('chain', 'moving the scan to', order[k], '— it answers the flow query');
+                node = { url: order[k], head: node.head, index: urls.indexOf(order[k]) };
               }
-            );
-          });
+              log('chain', 'flow filter accepted:', strat.id);
+              return strat;
+            },
+            function (e) {
+              flowNote = e.message;
+              if (TRANSIENT.test(e.message || '')) {
+                log('chain', 'flow filter (' + strat.id + ') busy on', order[k], '— asking the next node');
+                return tryShape(strat, k + 1);
+              }
+              log('chain', 'flow filter rejected (' + strat.id + '):', e.message);
+              return null;
+            }
+          );
+        }
+
+        return strategies.reduce(function (chain, strat) {
+          return chain.then(function (found) { return found || tryShape(strat, 0); });
         }, Promise.resolve(null));
       }
 
