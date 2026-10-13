@@ -53,6 +53,7 @@ export class Engine {
   ticketSource = null;
   onOver = null;
   newRecord = false;
+  prevTop = 0;
   screen;
   constructor(screen) {
     this.screen = screen;
@@ -168,6 +169,7 @@ export class Engine {
   }
   die() {
     sound.die();
+    this.prevTop = this.topScore;
     if (this.score > this.topScore) {
       this.topScore = this.score;
       this.newRecord = true;

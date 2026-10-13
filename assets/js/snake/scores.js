@@ -8,7 +8,7 @@
    (offline, or the API is down) the game plays exactly the same, unranked.
    ========================================================================== */
 
-import { renderCard, save, share, snapshot } from './share.js';
+import { renderCard, save, share, snapshot, tierFor } from './share.js';
 
 const API = 'api';
 const NAME_KEY = 'snake.name';
@@ -230,8 +230,14 @@ function mountForm(host, boardRoot) {
       if (r.rank) bits.push(`#${r.rank} all-time`);
       if (!r.weeklyBest) bits.push('(your best still stands)');
       msg.textContent = `${bits.join(' ')} Now share it!`;
-      // Put the rank on the card when this run is the one ranked.
-      if (card && r.weeklyBest && r.weekRank) draw({ ...card.info, rank: `#${r.weekRank} this week` });
+      // Put the rank on the card when this run is the one ranked, and give a
+      // high score its special card.
+      if (card) {
+        const info = { ...card.info, tier: tierFor(card.info, r) };
+        if (r.weeklyBest && r.weekRank) info.rank = `#${r.weekRank} this week`;
+        draw(info);
+        if (info.tier) msg.textContent = `${info.tier.label}! ${bits.join(' ')} Share it!`;
+      }
       load(boardRoot);
     } catch (err) {
       msg.textContent = String(err.message || err);
@@ -253,7 +259,9 @@ function mountForm(host, boardRoot) {
     cardImg.hidden = true;
     card = null;
     form.hidden = false;
-    draw({ score: r.score, level: r.level, board: r.board, host: location.host || '3310' });
+    const info = { score: r.score, level: r.level, board: r.board, newRecord: r.newRecord, host: location.host || '3310' };
+    info.tier = tierFor(info);
+    draw(info);
     // On a phone the form lands under the handset, below the fold.
     setTimeout(() => form.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 1900);
   };
@@ -266,7 +274,9 @@ export function attach(phone) {
   const boardRoot = document.querySelector('[data-board]');
   engine.ticketSource = take;
   const show = mountForm(phone, boardRoot);
-  engine.onOver = (r) => show({ ...r, board: snapshot(engine) });
+  // A personal best counts once there was one to beat.
+  engine.onOver = (r) =>
+    show({ ...r, board: snapshot(engine), newRecord: engine.newRecord && engine.prevTop > 0 });
   refill();
 
   if (!boardRoot) return;
