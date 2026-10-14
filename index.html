@@ -35,10 +35,10 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=25" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=25">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=25">
-<link rel="manifest" href="site.webmanifest?v=25">
+<link rel="icon" href="favicon.ico?v=26" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=26">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=26">
+<link rel="manifest" href="site.webmanifest?v=26">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -56,7 +56,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=25">
+<link rel="stylesheet" href="assets/css/styles.css?v=26">
 </head>
 <body>
 
@@ -145,12 +145,12 @@
     <div class="hero__stage">
     <video
       class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=25"
+      poster="images/header_poster.webp?v=26"
       width="1080" height="720"
       autoplay muted loop playsinline preload="none"
       aria-label="$3310 — the phone that never dies. A blue Nokia 3310 on a glowing blue stage, its screen cycling through Snake, BUY and $3310, beside BUY $3310. GET $NOKc., on Base."
-      data-src="images/header.mp4?v=25"
-      data-src-webm="images/header.webm?v=25"></video>
+      data-src="images/header.mp4?v=26"
+      data-src-webm="images/header.webm?v=26"></video>
 
     <script>
       (function () {
@@ -357,6 +357,8 @@
         <li><kbd>Esc</kbd> <span>back</span></li>
       </ul>
       <button class="game__sound" type="button" data-sound-toggle>Sound: on</button>
+      <p class="game__prize"><span class="game__prize-cup" aria-hidden="true">🏆</span>
+        <span><strong>Top the week, double your rewards.</strong> The board closes every Sunday at midnight UTC. The #1 score submitted with a wallet gets that week's $NOKc holder rewards <strong>doubled</strong>.</span></p>
     </div>
     <div class="game__phone" data-snake></div>
     <!-- ===================== LEADERBOARD ===================== -->
@@ -402,7 +404,7 @@
         <button type="button" data-hold="2">2%</button>
       </div>
       <label class="earn__field">
-        <span>Weekly volume</span>
+        <span>Weekly volume <em data-e-volnote></em></span>
         <input name="vol" inputmode="decimal" autocomplete="off" spellcheck="false">
       </label>
       <div class="earn__chips">
@@ -541,9 +543,9 @@
     });
   })();
 </script>
-<script src="config.js?v=25"></script>
-<script src="assets/js/app.js?v=25"></script>
-<script type="module" src="assets/js/earn.js?v=25"></script>
-<script type="module" src="assets/js/snake/phone.js?v=25"></script>
+<script src="config.js?v=26"></script>
+<script src="assets/js/app.js?v=26"></script>
+<script type="module" src="assets/js/earn.js?v=26"></script>
+<script type="module" src="assets/js/snake/phone.js?v=26"></script>
 </body>
 </html>

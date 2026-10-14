@@ -28,6 +28,8 @@ const state = {
   feeRead: false,
   inPool: null, // $3310 held by the pool
   vol24: null, // $
+  vol7: null, // $ traded in the last 7 days (GeckoTerminal daily candles)
+  vol7Days: 0, // how many daily candles that covers (fewer for a new pool)
   mcap: null, // $
   nokc: null, // $ per NOKc
 };
@@ -77,6 +79,28 @@ async function loadChain() {
   }
   if (bal !== null) state.inPool = Number(bal / 10n ** BigInt(Number(CFG.tokenDecimals) || 18));
 }
+
+// The pool's real volume for the last 7 days: the sum of its daily candles.
+async function loadWeek() {
+  const pool = CFG.contracts?.pool;
+  const base = CFG.geckoterminalBase || 'https://api.geckoterminal.com/api/v2';
+  if (!pool) return;
+  try {
+    const url = `${base}/networks/${CFG.chain || 'base'}/pools/${pool.toLowerCase()}/ohlcv/day?aggregate=1&limit=7&currency=usd`;
+    const d = await (await fetch(url, { headers: { Accept: 'application/json' } })).json();
+    const rows = d?.data?.attributes?.ohlcv_list || [];
+    const sum = rows.reduce((t, r) => t + (Number(r[5]) || 0), 0);
+    if (sum > 0) {
+      state.vol7 = sum;
+      state.vol7Days = rows.length;
+    }
+  } catch {
+    // Falls back to 24h volume × 7.
+  }
+}
+
+// This week's volume: the real 7-day figure, else today's pace × 7.
+const weekVol = () => state.vol7 ?? (state.vol24 ? state.vol24 * 7 : null);
 
 async function loadMarket() {
   try {
@@ -141,21 +165,35 @@ function mount() {
   );
   root.querySelectorAll('[data-vol]').forEach((b) =>
     b.addEventListener('click', () => {
-      const v = b.dataset.vol === 'live' ? (state.vol24 || 0) * 7 : Number(b.dataset.vol);
+      const v = b.dataset.vol === 'live' ? weekVol() || 0 : Number(b.dataset.vol);
       if (v > 0) volIn.value = `$${nf(0).format(v)}`;
       paint();
     }),
   );
+  let volTouched = false;
   holdIn.addEventListener('input', paint);
-  volIn.addEventListener('input', paint);
+  volIn.addEventListener('input', () => {
+    volTouched = true;
+    paint();
+  });
 
   holdIn.value = nf(0).format(supply / 100); // 1%
   volIn.value = '$500,000';
   paint();
 
-  Promise.all([loadMarket(), loadChain()]).then(() => {
+  Promise.all([loadMarket(), loadChain(), loadWeek()]).then(() => {
+    const v = weekVol();
     const live = root.querySelector('[data-vol=live]');
-    if (live && state.vol24) live.textContent = `Now: ${short(state.vol24 * 7).replace(/^/, '$')}/wk`;
+    const note = root.querySelector('[data-e-volnote]');
+    if (v) {
+      const label = state.vol7 !== null
+        ? state.vol7Days < 7 ? `since launch (${state.vol7Days}d)` : 'last 7 days'
+        : '24h × 7';
+      if (live) live.textContent = `This week: $${short(v)}`;
+      if (note) note.textContent = `$${short(v)} ${label}`;
+      // Default to the real week, unless the reader already typed their own.
+      if (!volTouched) volIn.value = `$${nf(0).format(v)}`;
+    }
     paint();
   });
 }

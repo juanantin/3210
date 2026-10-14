@@ -778,6 +778,23 @@ a { color: inherit; text-decoration: none; }
 
 .game__sound:hover { border-color: var(--accent); }
 
+.game__prize {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 20px 0 0;
+  max-width: 44ch;
+  padding: 10px 12px;
+  border: 2px solid #ffd23f;
+  background: rgba(255, 210, 63, .08);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  text-align: left;
+}
+.game__prize strong { color: #ffd23f; }
+.game__prize-cup { font-size: 18px; line-height: 1.2; }
+
 .game__intro { grid-area: intro; }
 .game__phone { grid-area: phone; align-self: center; justify-self: center; width: 100%; max-width: 250px; }
 .game > .board { grid-area: board; }
@@ -841,6 +858,7 @@ a { color: inherit; text-decoration: none; }
   .game > .board { text-align: left; }
   .game__lede { margin-left: auto; margin-right: auto; }
   .game__keys { justify-items: center; }
+  .game__prize { margin-left: auto; margin-right: auto; }
   .game__phone { max-width: 240px; }
 }
 
