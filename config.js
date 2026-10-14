@@ -12,7 +12,7 @@ window.SITE_CONFIG = {
   /* Build stamp. Shown in the ?debug=1 panel, so you can confirm which version
      a browser actually has rather than guessing at a cache. Moved together
      with every ?v= in index.html by `node scripts/stamp.mjs`. */
-  version: '24',
+  version: '25',
 
   /* ---- Token ---------------------------------------------------------- */
 
@@ -77,6 +77,16 @@ window.SITE_CONFIG = {
     // the one address here that is $3310's alone. The platform's /api/coins
     // entry names it as the pool's fee_owner, so fees are routed to it.
     rewardsIndex: '0xdad6D69e44e2601eaFeb550c9B63aF222aA7692e',
+  },
+
+  /* ---- Snake champion ------------------------------------------------ */
+  // Each week's #1 on the Snake board (with a wallet) has that week's $NOKc
+  // holder rewards doubled: the team sends a bonus equal to what the index
+  // paid that wallet during the week, up to bonusCap NOKc. Worked out every
+  // Monday by .github/workflows/champion.yml into data/champions.json; the
+  // bonus itself is sent by hand, and its transaction pasted into that file.
+  champion: {
+    bonusCap: 25,
   },
 
   /* ---- Links ---------------------------------------------------------- */

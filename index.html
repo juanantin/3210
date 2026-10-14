@@ -35,10 +35,10 @@
 
      The ?v= below is what makes a browser let go of the icon it has cached;
      node scripts/stamp.mjs moves all of them together. -->
-<link rel="icon" href="favicon.ico?v=24" sizes="any">
-<link rel="icon" type="image/png" href="images/favicon.png?v=24">
-<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=24">
-<link rel="manifest" href="site.webmanifest?v=24">
+<link rel="icon" href="favicon.ico?v=25" sizes="any">
+<link rel="icon" type="image/png" href="images/favicon.png?v=25">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png?v=25">
+<link rel="manifest" href="site.webmanifest?v=25">
 
 <!-- Two faces: Silkscreen, the banner's pixel type, for headings, labels and
      figures; Inter, in four weights, for anything read as a sentence.
@@ -56,7 +56,7 @@
       media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Silkscreen:wght@400;700&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/styles.css?v=24">
+<link rel="stylesheet" href="assets/css/styles.css?v=25">
 </head>
 <body>
 
@@ -145,12 +145,12 @@
     <div class="hero__stage">
     <video
       class="hero__media" id="hero-video"
-      poster="images/header_poster.webp?v=24"
+      poster="images/header_poster.webp?v=25"
       width="1080" height="720"
       autoplay muted loop playsinline preload="none"
       aria-label="$3310 — the phone that never dies. A blue Nokia 3310 on a glowing blue stage, its screen cycling through Snake, BUY and $3310, beside BUY $3310. GET $NOKc., on Base."
-      data-src="images/header.mp4?v=24"
-      data-src-webm="images/header.webm?v=24"></video>
+      data-src="images/header.mp4?v=25"
+      data-src-webm="images/header.webm?v=25"></video>
 
     <script>
       (function () {
@@ -370,14 +370,75 @@
           <button type="button" role="tab" data-board-tab="all" aria-selected="false">All-time</button>
         </div>
       </div>
+      <div class="board__champ" data-champion hidden></div>
       <ol class="board__list" data-board-list>
         <li class="board__empty">Loading…</li>
       </ol>
       <p class="board__note" data-board-note></p>
-      <p class="board__fine">Every score is replayed move by move on the server before it counts. Add a wallet to get the <span class="board__holder">$3310</span> badge if you hold.</p>
+      <p class="board__fine">Every score is replayed move by move on the server before it counts. Add a wallet to get the <span class="board__holder">$3310</span> badge if you hold.
+        <strong>Weekly champion:</strong> the week's #1 with a wallet gets that week's $NOKc holder rewards <strong>doubled</strong> (bonus up to <span data-champ-cap>25</span> NOKc).</p>
     </div>
   </section>
 
+
+  <!-- ===================== EARNINGS CALCULATOR ===================== -->
+  <!-- What holding pays, estimated from the pool's fee and a weekly volume.
+       assets/js/earn.js fills it; every assumption is printed under it. -->
+  <section class="earn" data-earn aria-labelledby="earn-title">
+    <div class="earn__head">
+      <h2 class="earn__title" id="earn-title">What does holding pay?</h2>
+      <p class="earn__lede">Every trade pays a fee. 90% of it goes to $3310 holders as $NOKc, split by how much you hold.</p>
+    </div>
+
+    <div class="earn__inputs">
+      <label class="earn__field">
+        <span>Your $3310 <em data-e-pct></em></span>
+        <input name="hold" inputmode="decimal" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="earn__chips">
+        <button type="button" data-hold="0.1">0.1%</button>
+        <button type="button" data-hold="0.5">0.5%</button>
+        <button type="button" data-hold="1">1%</button>
+        <button type="button" data-hold="2">2%</button>
+      </div>
+      <label class="earn__field">
+        <span>Weekly volume</span>
+        <input name="vol" inputmode="decimal" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="earn__chips">
+        <button type="button" data-vol="100000">$100K</button>
+        <button type="button" data-vol="500000">$500K</button>
+        <button type="button" data-vol="1000000">$1M</button>
+        <button type="button" data-vol="live">Now</button>
+      </div>
+    </div>
+
+    <div class="earn__out">
+      <div class="earn__stat earn__stat--main">
+        <span class="earn__label">You'd earn</span>
+        <span class="earn__big" data-e-week>…</span>
+        <span class="earn__sub" data-e-week-usd></span>
+      </div>
+      <div class="earn__stat">
+        <span class="earn__label">A month</span>
+        <span class="earn__mid" data-e-month>…</span>
+        <span class="earn__sub" data-e-month-usd></span>
+      </div>
+      <div class="earn__stat">
+        <span class="earn__label">Win the week at Snake</span>
+        <span class="earn__mid earn__mid--gold" data-e-champ>…</span>
+        <span class="earn__sub" data-e-champ-sub>rewards doubled</span>
+      </div>
+      <div class="earn__stat">
+        <span class="earn__label">Yield</span>
+        <span class="earn__mid" data-e-yield>…</span>
+        <span class="earn__sub" data-e-bag></span>
+      </div>
+    </div>
+
+    <p class="earn__why" data-e-why></p>
+    <p class="earn__fine">An estimate, not a promise: rewards follow trading volume, and $NOKc's price moves. Not financial advice.</p>
+  </section>
 
   <!-- ===================== TOKEN FACTS ===================== -->
   <!-- Fixed properties of the token, so they are written here rather than
@@ -480,8 +541,9 @@
     });
   })();
 </script>
-<script src="config.js?v=24"></script>
-<script src="assets/js/app.js?v=24"></script>
-<script type="module" src="assets/js/snake/phone.js?v=24"></script>
+<script src="config.js?v=25"></script>
+<script src="assets/js/app.js?v=25"></script>
+<script type="module" src="assets/js/earn.js?v=25"></script>
+<script type="module" src="assets/js/snake/phone.js?v=25"></script>
 </body>
 </html>

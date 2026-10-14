@@ -1,0 +1,5 @@
+{
+  "__doc": ["Weekly Snake champions, written by scripts/champion.mjs every Monday."],
+  "cap": 25,
+  "weeks": []
+}

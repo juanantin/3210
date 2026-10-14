@@ -1,0 +1,60 @@
+name: Snake champion
+
+# Every Monday, once the week has closed: finds last week's #1 on the Snake
+# board (with a wallet), adds up the $NOKc the rewards index paid that wallet
+# during the week, and records the bonus to send in data/champions.json.
+# The run's summary says exactly what to send and where. The bonus is sent by
+# hand; paste its transaction hash into that week's "tx" to mark it paid.
+
+on:
+  schedule:
+    - cron: '17 0 * * 1'      # Monday 00:17 UTC, off the busy :00 slot
+  workflow_dispatch:
+    inputs:
+      week:
+        description: 'Week to work out, e.g. 2026-W42 (default: last week)'
+        required: false
+
+concurrency:
+  group: champion
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  champion:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Work out the champion
+        env:
+          SITE_URL: ${{ vars.SITE_URL || 'https://www.3310nok.xyz' }}
+          RPC_URL: ${{ secrets.RPC_URL }}
+          WEEK: ${{ github.event.inputs.week }}
+        run: node scripts/champion.mjs
+
+      - name: Commit
+        run: |
+          set -u
+          if git diff --quiet -- data/champions.json && [ -z "$(git ls-files --others -- data/champions.json)" ]; then
+            echo "no change"; exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          cp data/champions.json /tmp/champions.json
+          for attempt in 1 2 3 4 5; do
+            git fetch origin "$GITHUB_REF_NAME"
+            git reset --hard "origin/$GITHUB_REF_NAME"
+            cp /tmp/champions.json data/champions.json
+            git add data/champions.json
+            git diff --cached --quiet && { echo "remote already has it"; exit 0; }
+            git commit -m "chore: weekly Snake champion [skip ci]"
+            git push origin HEAD:"$GITHUB_REF_NAME" && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

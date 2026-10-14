@@ -267,6 +267,49 @@ function mountForm(host, boardRoot) {
   };
 }
 
+/* ---- last week's champion (data/champions.json, scripts/champion.mjs) ---- */
+
+const fmtNokc = (n) => (n >= 10 ? n.toFixed(1) : n.toFixed(2)).replace(/\.?0+$/, '') || '0';
+
+async function champion(root) {
+  const box = root.querySelector('[data-champion]');
+  if (!box) return;
+  let data;
+  try {
+    const res = await fetch('data/champions.json', { cache: 'no-store' });
+    data = await res.json();
+  } catch {
+    return;
+  }
+  const cap = root.querySelector('[data-champ-cap]');
+  if (cap && data.cap) cap.textContent = String(data.cap);
+  const w = (data.weeks || []).find((x) => x.name);
+  if (!w) return;
+  box.replaceChildren();
+  const head = el('p', 'board__champ-head');
+  head.append(el('span', 'board__champ-cup', '🏆'), `Week ${w.week.split('-W')[1]} champion: `);
+  head.append(el('strong', null, w.name), ` · ${w.score} pts`);
+  box.append(head);
+  const line = el('p', 'board__champ-line');
+  if (w.earnedNokc > 0) {
+    line.append(`Earned ${fmtNokc(w.earnedNokc)} $NOKc holding. Rewards doubled: `);
+    line.append(el('strong', null, `+${fmtNokc(w.bonusNokc)} $NOKc`));
+    if (w.tx) {
+      const a = el('a', null, 'paid ↗');
+      a.href = `https://basescan.org/tx/${w.tx}`;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      line.append(' · ', a);
+    } else {
+      line.append(' · on its way');
+    }
+  } else {
+    line.append("Didn't hold $3310 that week, so there were no rewards to double. Hold to win double.");
+  }
+  box.append(line);
+  box.hidden = false;
+}
+
 /* ---- wiring ---- */
 
 export function attach(phone) {
@@ -287,6 +330,7 @@ export function attach(phone) {
     }),
   );
   load(boardRoot);
+  champion(boardRoot);
   setInterval(() => {
     if (!document.hidden) load(boardRoot);
   }, 60000);

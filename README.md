@@ -306,6 +306,33 @@ all-time, under the game.
   their lowercased wallet, or `n:<NAME>`.
 - `npm test` covers the replay and the API against an in-memory store.
 
+## Weekly champion (rewards doubled)
+
+Each week's #1 on the Snake board, among scores submitted with a wallet, gets
+that week's $NOKc holder rewards doubled, up to `champion.bonusCap` in
+config.js (25 NOKc).
+
+1. Monday 00:17 UTC, `.github/workflows/champion.yml` runs
+   `scripts/champion.mjs`. It reads last week's board from the site's API,
+   adds up the $NOKc the rewards index paid the champion's wallet during that
+   week (Monday to Monday, UTC), and writes `data/champions.json`. The run's
+   summary on the Actions page says exactly what to send and where.
+2. Send `bonusNokc` $NOKc to that wallet by hand.
+3. Paste the transaction hash into that week's `"tx"` in
+   `data/champions.json` (edit it on GitHub). The board's banner then shows
+   the week as paid, linked to Basescan. A week with a tx is never recomputed.
+
+A champion who held no $3310 that week earned nothing, so there is nothing to
+double: winning pays only holders. Run it for a given week from the Actions
+tab (Run workflow, week `2026-W42`).
+
+## Earnings calculator
+
+"What does holding pay?" under the game (`assets/js/earn.js`): weekly volume
+× the pool's fee (read from the pool's `fee()`) × 90% × your share of the
+supply held outside the pool, priced in $NOKc. Every figure it uses is
+printed under the result.
+
 ## Deploying
 
 **This site deploys to Vercel.** `vercel.json` sets the build to

@@ -1,4 +1,5 @@
 /* GET  /api/scores — the boards: all-time and this week, top 10 each.
+        ?week=2026-W42 returns that week instead of this one (kept 120 days).
    POST /api/scores — submit a finished run for the boards.
 
    A run is not taken on trust. It names the ticket (api/ticket.js) whose seed
@@ -47,6 +48,9 @@ async function board(key) {
       score: Number(ranked[i + 1]),
       level: m.level ?? null,
       wallet: short(m.wallet),
+      // The full address too: the weekly champion's bonus is paid to it
+      // (scripts/champion.mjs). Players chose to publish it.
+      address: m.wallet || null,
       holder: Boolean(m.holder),
       at: m.at ?? null,
     });
@@ -54,10 +58,12 @@ async function board(key) {
   return rows;
 }
 
-export async function GET() {
+export async function GET(request) {
   if (!configured()) return json({ error: 'leaderboard offline' }, 503);
   try {
-    const week = isoWeek();
+    const asked = new URL(request?.url || 'http://x/').searchParams.get('week');
+    if (asked && !/^\d{4}-W\d{2}$/.test(asked)) return json({ error: 'week looks like 2026-W42' }, 400);
+    const week = asked ? { id: asked, endsAt: null } : isoWeek();
     const [all, weekly, games] = await Promise.all([board('lb:all'), board(`lb:w:${week.id}`), redis('GET', 'lb:games')]);
     return json(
       { all, week: weekly, weekId: week.id, weekEndsAt: week.endsAt, games: Number(games) || 0 },
