@@ -7,18 +7,18 @@
     "Nulls here are the launch state, not a fault: the indexer has not run yet,",
     "and refuses to until worker/src/config.js names the token and its index."
   ],
-  "totalDistributed": null,
-  "totalDistributedUsd": null,
-  "totalFeesCollected": null,
-  "totalFeesTokens": null,
-  "holders": null,
-  "marketCap": 4500,
-  "liquidity": 4399.7,
-  "volume24h": 73.67,
-  "updatedAt": "2026-10-23T17:30:29.802Z",
+  "totalDistributed": 228.74855010299999,
+  "totalDistributedUsd": 1857.4382268363597,
+  "totalFeesCollected": 2071.2108715788,
+  "totalFeesTokens": 255.07523049,
+  "holders": 207,
+  "marketCap": 4557,
+  "liquidity": 4456.12,
+  "volume24h": 17.4,
+  "updatedAt": "2026-10-23T20:37:37.862Z",
   "meta": {
-    "synced": false,
-    "blocksBehind": 8642,
-    "kexPriceUsd": 8.1
+    "synced": true,
+    "blocksBehind": 0,
+    "kexPriceUsd": 8.12
   }
 }
