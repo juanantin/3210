@@ -8,17 +8,17 @@
     "and refuses to until worker/src/config.js names the token and its index."
   ],
   "totalDistributed": 228.74855010299999,
-  "totalDistributedUsd": 1944.3626758755,
-  "totalFeesCollected": 2168.139459165,
+  "totalDistributedUsd": 1960.37507438271,
+  "totalFeesCollected": 2185.9947252993,
   "totalFeesTokens": 255.07523049,
-  "holders": 202,
-  "marketCap": 4481,
-  "liquidity": 4416.96,
-  "volume24h": 9.99,
-  "updatedAt": "2026-11-03T17:43:08.199Z",
+  "holders": 201,
+  "marketCap": 4467,
+  "liquidity": 4405.47,
+  "volume24h": 16.87,
+  "updatedAt": "2026-11-03T22:34:38.326Z",
   "meta": {
     "synced": true,
     "blocksBehind": 0,
-    "kexPriceUsd": 8.5
+    "kexPriceUsd": 8.57
   }
 }
